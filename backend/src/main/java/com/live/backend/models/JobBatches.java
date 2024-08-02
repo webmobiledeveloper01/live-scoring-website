@@ -1,5 +1,6 @@
 package com.live.backend.models;
 
+import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,10 +10,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "job_batches")
 public class JobBatches {
     @Id
@@ -38,13 +41,11 @@ public class JobBatches {
     private String options;
 
     @Column(name = "cancelled_at", nullable = true)
-    private int cancelled_at;
+    private Timestamp cancelled_at;
 
     @Column(name = "created_at", nullable = false)
-    private int created_at;
+    private Timestamp created_at;
 
     @Column(name = "finished_at", nullable = true)
-    private int finished_at;
-
+    private Timestamp finished_at;
 }
-
