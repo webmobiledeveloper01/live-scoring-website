@@ -1,0 +1,117 @@
+.tournament-management {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tournament-management h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-tournament-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.add-tournament-btn:hover {
+  background-color: #0056b3;
+}
+
+.tournament-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tournament-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.tournament-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tournament-form button:hover {
+  background-color: #0056b3;
+}
+
+.tournament-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tournament-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.tournament-details {
+  flex-grow: 1;
+}
+
+.tournament-details h3 {
+  margin: 0;
+}
+
+.tournament-details p {
+  margin: 5px 0;
+}
+
+.tournament-details button {
+  padding: 5px 10px;
+  margin-left: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tournament-details button:hover {
+  background-color: #c82333;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}

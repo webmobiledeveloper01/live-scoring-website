@@ -1,0 +1,179 @@
+
+  .account-page .account-container{
+    width: 60%;
+    height: calc(100vh - 180px);
+    margin: auto;
+    padding: 15px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    animation: open .5s;
+    background: #061727;
+  }
+  .account-page .setting {
+    margin-left: 100px;
+    padding-left: 50px;
+    border-left: 1px solid rgb(209, 209, 209);
+    height: 100%;
+  }
+  @keyframes open {
+    0%  {background-position: 166% -25%, 220% -69%;}
+    100%{background-position: 120% -5%, 200% -40%;}
+  }
+  .account-page form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .account-page .field{
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    }
+    .account-page input[type="file"] {
+    display: none;
+  }
+  
+  .custom-file-upload {
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    padding: 6px;
+    cursor: pointer;
+    background: linear-gradient(270deg, #3fa1a9, #79f1a4);
+    margin-bottom: 25px;
+  }
+  
+  .account-page .img-wrap{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .account-page .img-upload:before{
+    content: "upload";
+    font-size: 16px;
+    position: absolute;
+    padding-top: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #63d3a6;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #fff;
+  }
+  .account-page .img-upload:hover:before{
+   opacity: 1;
+  }
+  .account-page img {
+    width: auto;
+    height: 100%;
+  }
+  
+  .account-page label{
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #676767;
+  }
+  
+  .account-page input{
+    border-radius: 15px;
+    border: 1px solid #b7b7b7;
+    padding: 5px 5px 5px 10px;
+    font-size: 16px;
+    transition: 0.2s;
+  }
+  .account-page input:focus{
+    outline: none;
+    border: 1px solid #64d488;
+  }
+  .account-page input::placeholder{
+    color: #bebebe;
+  }
+  .account-page .name{ 
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #676767;
+    max-width: 220px;
+    overflow-wrap: break-word;
+  }
+  .account-page .status{
+    text-align: center;
+    max-width: 220px;
+    overflow-wrap: break-word;
+  }
+  .account-page button{
+    color: #054231;
+    letter-spacing: 1px;
+    margin: 20px;
+    font-size: 12px;
+    padding: 10px 15px;
+    text-align: center;
+    transition: 0.5s;
+    border-radius: 10px;
+    cursor: pointer;
+    border-radius: 25px;
+    border: none;
+    background: #64d488;
+  }
+  .account-page .save{
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    /* box-shadow: 20px 0px 40px 0px  #63d3a6; */
+  }
+  .account-page .edit{
+    color: #fff;
+  }
+  .account-page button:hover{
+    color: #fff;
+    /* box-shadow: 0px 0px 20px 0px  #63d3a6; */
+    padding: 10px 50px;
+  }
+  .account-page button:focus{
+    outline: none;
+  }
+  .account-page .lds-ripple {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-ripple div {
+    position: absolute;
+    border: 4px solid #fff;
+    opacity: 1;
+    border-radius: 50%;
+    animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+  .lds-ripple div:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  
+  
+  .fa-instagram{
+    position: absolute;
+    color: #79f1a4;
+    top: 3%;
+    right: 2%;
+    font-size: 38px;
+  }
+  .fa-instagram:hover{
+    font-size: 42px;
+    color: #caff81;
+    transition: all .1s linear;
+    cursor: pointer;
+  }
+  

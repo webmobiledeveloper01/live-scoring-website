@@ -1,0 +1,11 @@
+.knockout {
+    height: 100%;
+}
+.knockout-item.top, .knockout-item.top .knockout-item-number {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.knockout-item.bottom, .knockout-item.bottom .knockout-item-number {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
