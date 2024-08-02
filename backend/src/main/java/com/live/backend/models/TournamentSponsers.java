@@ -38,7 +38,6 @@ public class TournamentSponsers {
     @Column(length = 255, nullable = true)
     private String type;
 
-
     @Column(columnDefinition = "TINYINT(4) DEFAULT 1", nullable = false)
     private int status;
 
