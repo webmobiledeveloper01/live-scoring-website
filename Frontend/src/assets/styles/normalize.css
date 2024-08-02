@@ -1,0 +1,36 @@
+html {
+  font-size: 12px;
+  color: #a2b1bf;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #4c555e;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #062238;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #061727;
+}
+* {
+  font-family: "Inter var", Roboto, Helvetica, Arial, sans-serif !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  color: inherit;
+}
+button {
+  border: none;
+}
