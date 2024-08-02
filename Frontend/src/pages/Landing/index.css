@@ -6,12 +6,23 @@
   background-size: cover;
   background-position: center;
   animation: page-fade 0.3s 1.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.landing-logo-container {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 30px;
+  padding: 0 15px;
 }
 
 .landing-logo {
-  margin-top: 30px;
-  width: 300px;
+  width: 100%;
+  height: auto;
   animation: logo-fade 0.8s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+  
 }
 
 @keyframes logo-fade {
@@ -30,6 +41,7 @@
     transform: scale(1.3);
   }
 }
+
 @keyframes page-fade {
   from {
     opacity: 1;
@@ -37,4 +49,11 @@
   to {
     opacity: 0;
   }
+}
+
+@media (max-width: 768px) {
+  .landing-logo-container {
+    max-width: 90%;
+  }
+  
 }
