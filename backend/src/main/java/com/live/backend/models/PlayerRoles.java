@@ -1,7 +1,6 @@
 package com.live.backend.models;
 
 import java.sql.Timestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +28,7 @@ public class PlayerRoles {
     @Column(length = 255, nullable = false)
     private String name;
 
-    @Column(columnDefinition = "TINYINT(4)", nullable = false)
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1", nullable = false)
     private int status;
 
     @Column(nullable = true)
@@ -42,3 +41,4 @@ public class PlayerRoles {
     private Timestamp updated_at;
 
 }
+
