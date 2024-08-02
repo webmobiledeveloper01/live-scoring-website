@@ -1,10 +1,12 @@
 import * as React from 'react'
 import './index.css'
 
-function Landing () {
+function Landing() {
   return (
-    <div className='loading-page max-md:w-full'>
-      <img src='/images/GFA_logo.svg' className='landing-logo max-md:w-full' />
+    <div className='loading-page'>
+      <div className='landing-logo-container'>
+        <img src='/images/GFA_logo.svg' className='landing-logo' alt="GFA Logo" />
+      </div>
     </div>
   )
 }
