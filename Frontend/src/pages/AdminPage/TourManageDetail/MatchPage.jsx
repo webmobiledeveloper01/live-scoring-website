@@ -3,7 +3,7 @@ import CustomEditTable from "../../../components/CustomEditTable";
 import { columns, initialRows } from "./datas/matchData"
 function TeamPage() {
     return (
-        <CustomEditTable columns={columns} data={initialRows} option={{rowHeight:80}}/>
+        <CustomEditTable columns={columns} data={initialRows} option={{rowHeight:90}}/>
     );
 }
 
