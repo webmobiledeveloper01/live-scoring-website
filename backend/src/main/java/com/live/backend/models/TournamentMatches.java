@@ -1,5 +1,4 @@
 package com.live.backend.models;
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -7,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,14 +25,17 @@ public class TournamentMatches {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "tournament_id", nullable = false)
-    private Long tournament_id;
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", nullable = false)
+    private Tournaments tournament;
 
-    @Column(name = "team_id_a", nullable = false)
-    private Long team_id_a;
+    @ManyToOne
+    @JoinColumn(name = "team_id_a", nullable = false)
+    private Teams teamA;
 
-    @Column(name = "team_id_b", nullable = false)
-    private Long team_id_b;
+    @ManyToOne
+    @JoinColumn(name = "team_id_b", nullable = false)
+    private Teams teamB;
 
     @Column(name = "match_time")
     private LocalDateTime match_time;
