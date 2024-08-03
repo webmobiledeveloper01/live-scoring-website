@@ -1,4 +1,5 @@
 package com.live.backend.models;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -8,44 +9,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-@Table(name = "teams")
-public class Teams {
+@Table(name = "team_has_players")
+public class TeamHasPlayers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, columnDefinition = "BIGINT(20) UNSIGNED")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
+    @Column(name = "team_id", nullable = false)
+    private Long team_id;
 
-    @Column(name = "logo", length = 255)
-    private String logo;
-
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "contact_details", columnDefinition = "TEXT")
-    private String contact_details;
-
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @Column(name = "player_id", nullable = false)
+    private Long player_id;
 
     @Column(name = "created_at")
     private LocalDateTime created_at;
 
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deleted_at;
 }
