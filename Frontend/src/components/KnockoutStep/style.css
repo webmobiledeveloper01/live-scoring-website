@@ -1,11 +1,40 @@
+.knockout-scroll-container {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Disable vertical scrolling if not needed */
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+}
+
+.knockout-scroll-container > div {
+    min-width: max-content; /* Ensure the content takes the minimum width required */
+}
+
 .knockout {
     height: 100%;
 }
+
 .knockout-item.top, .knockout-item.top .knockout-item-number {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }
+
 .knockout-item.bottom, .knockout-item.bottom .knockout-item-number {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.j-between {
+    justify-content: space-between;
 }

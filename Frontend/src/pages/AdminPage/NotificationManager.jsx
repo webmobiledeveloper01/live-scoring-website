@@ -1,12 +1,6 @@
 import React from 'react'
 import CustomTab from '../../components/CustomTabs'
 import CustomEditTable from '../../components/CustomEditTable'
-// import {
-//   contentMenu,
-//   columns,
-//   EditToolbar,
-//   initialRows
-// } from '../AdminPage/datas/updates'
 import {
   contentMenuu,
   columnss,
@@ -14,10 +8,8 @@ import {
   initialRowss
 } from '../AdminPage/datas/updates'
 
-import PropTypes from 'prop-types'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { Main } from '../../styled'
 import { useSelector } from 'react-redux'

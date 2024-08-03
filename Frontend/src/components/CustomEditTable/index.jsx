@@ -135,8 +135,8 @@ export default function CustomEditTable ({
           '--DataGrid-rowBorderColor': 'transparent',
           border: 'none',
           '& .MuiDataGrid-cell': {
-            fontSize: '12px',
-            color: '#bcbfbf'
+            fontSize: '12px ',
+            color: '#bcbfbf',
           },
           '& .MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within': {
             outline: 'none',
