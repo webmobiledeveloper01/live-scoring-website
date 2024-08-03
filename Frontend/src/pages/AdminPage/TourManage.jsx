@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import './adminstyle.css'
-
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
-
 import CustomTab from '../../components/CustomTabs'
 import CustomEditTable from '../../components/CustomEditTable'
 import {
@@ -55,10 +53,10 @@ const TournamentManagement = () => {
   }
   return (
     <>
-      <div className='max-w-6xl mx-auto mt-10 ml28 max-md:m-0 max-md:p-4'>
-        <ul className='nav main-nav  flex gap-8  bg-[#061727] min-h-[64px] items-center'>
+      <div className='max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4'>
+        <ul className='nav main-nav  flex gap-8  bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6'>
           {menuLists.map((item, index) => (
-            <li className='nav-item  cursor-pointer p-4 ' key={index}>
+            <li className='nav-item  cursor-pointer p-4 flex-shrink-0' key={index}>
               <a
                 className={
                   ('nav-link cursor-pointer',
