@@ -134,31 +134,6 @@ function Home () {
         </div>
       )}
     </div>
-    //     <Main open={open}>
-    //       <DrawerHeader />
-
-    //       {/* <ul className=' bg-[#061727] nav man-navbar flex gap-8'>
-    //         {menus.map((item, index) => (
-    //           <li
-    //             className='nav-item p-6 navnk text-[16px] cursor-pointer'
-    //             key={index}
-    //           >
-    //             <a
-    //               className={clsx(
-    //                 'nav-link text-[16px]  font-thin',
-    //                 index == select && '!active !text-[#d6a631]'
-    //               )}
-    //               onClick={() => handleClick(item.url)}
-    //             >
-    //               {item.text}
-    //             </a>
-    //           </li>
-    //         ))}
-    //       </ul> */}
-
-    //       {/* {authentification && role != 'admin' && <AdminDrawer />} */}
-
-    //     {/* </Main> */}
   )
 }
 
