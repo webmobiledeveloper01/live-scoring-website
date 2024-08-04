@@ -38,10 +38,10 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1",nullable = false)
     private int role;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1",nullable = false)
     private int status;
 
     private String remember_token;

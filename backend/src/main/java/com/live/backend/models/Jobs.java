@@ -1,5 +1,6 @@
 package com.live.backend.models;
 
+import java.sql.Timestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,13 +32,13 @@ public class Jobs {
     @Column(columnDefinition = "TINYINT(3) UNSIGNED", nullable = false)
     private int attempts;
 
-    @Column(columnDefinition = "INT(10) UNSIGNED", nullable = true)
-    private Integer reserved_at;
+    @Column(name = "reserved_at", nullable = true)
+    private Timestamp reserved_at;
 
-    @Column(columnDefinition = "INT(10) UNSIGNED", nullable = false)
-    private Integer available_at;
+    @Column(name = "available_at", nullable = false)
+    private Timestamp available_at;
 
-    @Column(columnDefinition = "INT(10) UNSIGNED", nullable = false)
-    private Integer created_at;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp created_at;
 
 }
