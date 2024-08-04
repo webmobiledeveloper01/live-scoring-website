@@ -180,7 +180,7 @@ const Dashboard = () => {
             ))}
           </div>
 
-          <div className='mainboy wfull team-chrt-lists flex flex-col  max-md:m-4'>
+          <div className='mainboy wfull team-chrt-lists flex flex-col  max-md:m-4 '>
             <List
               subheader='Winning Percentage'
               sx={{
