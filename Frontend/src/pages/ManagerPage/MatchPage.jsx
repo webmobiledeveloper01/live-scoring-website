@@ -1,9 +1,3 @@
-// import React from 'react'
-// import CustomSelect from '../../components/CustomSelect'
-// import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
-// import Stack from '@mui/material/Stack'
-// import { contentMenu } from './datas/matchData'
-
 import React from 'react'
 import CustomTab from '../../components/CustomTabs'
 import CustomEditTable from '../../components/CustomEditTable'
