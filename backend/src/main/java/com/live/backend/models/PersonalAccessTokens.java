@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "personal_access_tokens") // Replace 'personal_access_tokens' with the actual table name if different
+@Table(name = "personal_access_tokens") 
 
 public class PersonalAccessTokens {
     @Id

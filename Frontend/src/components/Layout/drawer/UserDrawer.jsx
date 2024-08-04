@@ -8,14 +8,15 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import SportsSoccerOutlinedIcon from '@mui/icons-material/SportsSoccerOutlined'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined'
 import { selectSidebarItem } from '../../../redux/actions/sidebar'
 import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '../../../redux/actions/auth'
 
-export default function UserDrawer () {
+export default function UserDrawer() {
   const dispatch = useDispatch()
   const [open, setOpen] = React.useState(true)
   const navigate = useNavigate()
@@ -82,10 +83,13 @@ export default function UserDrawer () {
     { text: 'Germany', icon: 'https://static.livescore.com/i2/fh/germany.jpg' }
   ]
 
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/')
+  }
+
   return (
     <>
-      {/* This part is team nmenu title */}
-
       <ListItemButton
         sx={{
           margin: '1px 5px',
@@ -100,8 +104,6 @@ export default function UserDrawer () {
         <ArrowForwardIosIcon sx={{ color: 'grey' }} fontSize='small' />
       </ListItemButton>
       <Divider sx={{ borderWidth: '1px' }} />
-
-      {/* This part is team menu */}
 
       <List>
         {teamMenus.map((item, index) => (
@@ -139,8 +141,6 @@ export default function UserDrawer () {
       </ListItemButton>
       <Divider sx={{ borderWidth: '1px' }} />
 
-      {/* This part is competition menu */}
-
       <List>
         {competitionMenus.map((item, index) => (
           <ListItem
@@ -163,7 +163,6 @@ export default function UserDrawer () {
         ))}
       </List>
 
-      {/* This part is regions menu title */}
       <ListItemButton
         sx={{
           margin: '1px 5px',
@@ -204,6 +203,23 @@ export default function UserDrawer () {
             }}
           />
           <ArrowForwardIosIcon sx={{ color: 'grey' }} fontSize='small' />
+        </ListItem>
+      </List>
+      <Divider sx={{ borderWidth: '1px' }} />
+      <List>
+        <ListItem disablePadding onClick={handleLogout}>
+          <ListItemButton
+            sx={{
+              margin: '2px',
+              padding: '5px',
+              '& .MuiListItemIcon-root': { minWidth: 35 }
+            }}
+          >
+            <ListItemIcon>
+              <ExitToAppOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary='Logout' />
+          </ListItemButton>
         </ListItem>
       </List>
     </>

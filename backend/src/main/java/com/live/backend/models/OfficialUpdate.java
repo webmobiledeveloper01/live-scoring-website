@@ -22,11 +22,11 @@ public class OfficialUpdate {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", columnDefinition = "LONGTEXT", nullable = false)
     private String description;
 
-    @Column(name = "status", nullable = false, columnDefinition = "INT DEFAULT 1")
-    private Integer status;
+    @Column(name = "status", nullable = false, columnDefinition = "TINYINT(4) DEFAULT 1")
+    private int status;
 
     @Column(name = "created_at", nullable = true)
     private Timestamp createdAt;

@@ -27,7 +27,6 @@ import { Search, SearchIconWrapper, StyledInputBase, AppBar, TopToolbar, drawerW
 export default function PersistentDrawerRight () {
   const [menuIndex, setMenuIndex] = React.useState(0)
   const pathname = useLocation().pathname
-  const [drawer, setDrawer] = React.useState(<UserDrawer />)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [moreAnchorEl, setMoreAnchorEl] = React.useState(null)
   const dispatch = useDispatch()
@@ -127,7 +126,7 @@ export default function PersistentDrawerRight () {
                 )
               )}
             </Box>
-            {isMobile && open ? (
+            {isMobile && open && !authentification ? (
               <IconButton color="inherit" onClick={handleMoreClick}>
                 <MoreVertIcon />
               </IconButton>
@@ -200,7 +199,7 @@ export default function PersistentDrawerRight () {
       >
         <SiteLogo />
         <Divider />
-        {!authentification && role == 'common' && (
+        {!authentification && role === 'common' && (
           <Search
             sx={{ borderRadius: 25, width: '100%', m: '30px 0 20px 0' }}
           >
@@ -213,7 +212,7 @@ export default function PersistentDrawerRight () {
             />
           </Search>
         )}
-        {authentification && role != 'common' && (
+        {authentification && role !== 'common' && (
           <List sx={{ textAlign: 'center' }}>
             <Avatar
               alt='Remy Sharp'
@@ -222,13 +221,13 @@ export default function PersistentDrawerRight () {
             />
             <h5>courtney Henry</h5>
             <Typography variant='subtitle1' gutterBottom>
-              {authentification && role == 'manager' ? 'Manager' : 'Super Admin'}
+              {authentification && role === 'manager' ? 'Manager' : 'Super Admin'}
             </Typography>
           </List>
         )}
-        {authentification && role == 'admin' && <AdminDrawer />}
-        {!authentification && role == 'common' && <UserDrawer />}
-        {authentification && role == 'manager' && <ManagerDrawer />}
+        {authentification && role === 'admin' && <AdminDrawer />}
+        {authentification && role === 'manager' && <ManagerDrawer />}
+        {(!authentification || (authentification && role === 'common')) && <UserDrawer />}
         <Divider />
       </Drawer>
     </>

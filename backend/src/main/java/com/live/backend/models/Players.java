@@ -39,8 +39,8 @@ public class Players {
     @Column(name = "role_id")
     private Long roleId;
 
-    @Column(nullable = false)
-    private Integer status = 1;
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1",nullable = false)
+    private int status;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
