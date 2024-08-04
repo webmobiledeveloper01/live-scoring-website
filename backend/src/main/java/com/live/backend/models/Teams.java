@@ -37,8 +37,8 @@ public class Teams {
     @Column(name = "contact_details", columnDefinition = "TEXT")
     private String contact_details;
 
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @Column(name = "status",columnDefinition = "TINYINT(4) DEFAULT 1" ,nullable = false)
+    private int status;
 
     @Column(name = "created_at")
     private LocalDateTime created_at;

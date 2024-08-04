@@ -27,7 +27,7 @@ public class Sessions {
     private String ip_address;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT", nullable = true)
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String user_agent;
 
     @Lob
