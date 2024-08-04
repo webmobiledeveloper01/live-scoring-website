@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Main, DrawerHeader } from '../../styled'
+import { useNavigate } from 'react-router-dom'
+import { 
+  Box, 
+  Typography, 
+  Tab, 
+  Tabs, 
+  Select, 
+  MenuItem, 
+  List, 
+  ListSubheader, 
+  useMediaQuery, 
+  useTheme 
+} from '@mui/material'
+import CustomGauge from '../../components/CustomGauge'
+import CustomMultiGauge from '../../components/CustomMultiGauge'
+import CustomBarChart from '../../components/CustomBarChart'
 import Overview from './competitions/Overview'
 import Matches from './competitions/Matches'
 import Standing from './competitions/Standing'
@@ -9,133 +25,93 @@ import TeamMatches from './teams/Matches'
 import TeamStanding from './teams/Standing'
 import Squad from './teams/Squad'
 import Transfer from './teams/Transfer'
-import clsx from 'clsx'
-import List from '@mui/material/List'
-import CustomGauge from '../../components/CustomGauge'
-import CustomMultiGauge from '../../components/CustomMultiGauge'
-import CustomBarChart from '../../components/CustomBarChart'
-import AdminDrawer from '../../components/Layout/drawer/AdminDrawer'
-import { useNavigate } from 'react-router-dom'
-function UserPage () {
-  const [select, setSelect] = React.useState(0)
-  const [renderPage, setRenderPage] = React.useState(<Overview />)
+
+function UserPage() {
+  const [select, setSelect] = useState(0)
+  const [renderPage, setRenderPage] = useState(<Overview />)
   const open = useSelector(state => state.drawer.open)
   const teamInfo = useSelector(state => state.sidebar)
-  const menuLists =
-    teamInfo.type != 'team'
-      ? ['overview', 'matches', 'standing']
-      : ['overview', 'matches', 'standing', 'transfers', 'squad']
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-  React.useEffect(() => {
+  const menuLists = teamInfo.type !== 'team'
+    ? ['overview', 'matches', 'standing']
+    : ['overview', 'matches', 'standing', 'transfers', 'squad']
+
+  useEffect(() => {
     handleMenu(select)
   }, [teamInfo])
 
-  const navigate = useNavigate()
-
-  const handleMenu = (index, text) => {
+  const handleMenu = (index) => {
     navigate('/')
     setSelect(index)
-    switch (index) {
-      case 0:
-        teamInfo.type != 'team'
-          ? setRenderPage(<Overview />)
-          : setRenderPage(<TeamOverview />)
-        break
-      case 1:
-        teamInfo.type != 'team'
-          ? setRenderPage(<Matches />)
-          : setRenderPage(<TeamMatches />)
-        break
-      case 2:
-        teamInfo.type != 'team'
-          ? setRenderPage(<Standing />)
-          : setRenderPage(<TeamStanding />)
-        break
-      case 3:
-        teamInfo.type == 'team' ? setRenderPage(<Transfer />) : handleMenu(0)
-        break
-      case 4:
-        teamInfo.type == 'team' ? setRenderPage(<Squad />) : handleMenu(0)
-        break
-      default:
-        break
-    }
+    const pages = [
+      teamInfo.type !== 'team' ? <Overview /> : <TeamOverview />,
+      teamInfo.type !== 'team' ? <Matches /> : <TeamMatches />,
+      teamInfo.type !== 'team' ? <Standing /> : <TeamStanding />,
+      <Transfer />,
+      <Squad />
+    ]
+    setRenderPage(pages[index] || pages[0])
   }
-
-  const { authentification, role } = useSelector(state => state.auth)
 
   return (
     <Main open={open}>
       <DrawerHeader />
-
-      {/* {authentification && role != 'admin' && <AdminDrawer />} */}
-      <div className='d-flex user-page-container'>
-        <div style={{ width: teamInfo.type == 'team' ? '75%' : '100%' }}>
-          <div className='main-head d-flex flex-column'>
-            <div className='main-head-intro d-flex j-between align-center'>
-              <div className='main-head--logo d-flex align-center j-start'>
-                <img src={teamInfo.icon} alt={teamInfo.text + ' flag'} />
-                <div className='main-head--info d-flex flex-column'>
-                  <h2 className='main-head--team'>{teamInfo.text}</h2>
-                  <h5 className='main-head--country text-secondary'>
-                    {teamInfo.subtext}
-                  </h5>
-                </div>
-              </div>
-            </div>
-            <ul className='nav main-navbar flex gap-8'>
-              {menuLists.map((item, index) => (
-                <li className='nav-item' key={index}>
-                  <a
-                    className={clsx('nav-link', index == select && 'active')}
-                    onClick={() => handleMenu(index, item)}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className='main-body'>{renderPage}</div>
-        </div>
-        {teamInfo.type == 'team' && (
-          <div className='main-body team-chart-lists '>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, p: 2 }}>
+        <Box sx={{ flexGrow: 1, minWidth: 0, maxWidth: '100%' }}>
+          <Box sx={{ mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Box component="img" src={teamInfo.icon} alt={`${teamInfo.text} flag`} sx={{ maxWidth: 50, mr: 1 }} />
+              <Box>
+                <Typography variant="h4" component="h2">{teamInfo.text}</Typography>
+                <Typography variant="subtitle1" color="text.secondary">{teamInfo.subtext}</Typography>
+              </Box>
+            </Box>
+            {isMobile ? (
+              <Select
+                value={select}
+                onChange={(e) => handleMenu(e.target.value)}
+                fullWidth
+              >
+                {menuLists.map((item, index) => (
+                  <MenuItem key={index} value={index}>{item}</MenuItem>
+                ))}
+              </Select>
+            ) : (
+              <Tabs value={select} onChange={(_, newValue) => handleMenu(newValue)}>
+                {menuLists.map((item, index) => (
+                  <Tab key={index} label={item} />
+                ))}
+              </Tabs>
+            )}
+          </Box>
+          <Box>{renderPage}</Box>
+        </Box>
+        {teamInfo.type === 'team' && (
+          <Box sx={{ flexShrink: 0, width: { xs: '100%', md: 300 } }}>
             <List
-              subheader='Winning Percentage'
-              sx={{
-                backgroundColor: '#041421',
-                borderRadius: '8px',
-                margin: '20px 0',
-                padding: '10px'
-              }}
+              subheader={<ListSubheader>Winning Percentage</ListSubheader>}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
             >
               <CustomGauge value={75} />
             </List>
             <List
-              subheader='Match History'
-              sx={{
-                backgroundColor: '#041421',
-                borderRadius: '8px',
-                padding: '10px',
-                margin: '20px 0'
-              }}
+              subheader={<ListSubheader>Match History</ListSubheader>}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
             >
               <CustomBarChart value={75} />
             </List>
             <List
-              subheader='Team Performance'
-              sx={{
-                backgroundColor: '#041421',
-                borderRadius: '8px',
-                margin: '20px 0',
-                padding: '10px'
-              }}
+              subheader={<ListSubheader>Team Performance</ListSubheader>}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
             >
               <CustomMultiGauge />
             </List>
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     </Main>
   )
 }

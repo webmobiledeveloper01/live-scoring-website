@@ -4,8 +4,6 @@ import List from '@mui/material/List'
 import CustomGauge from '../../components/CustomGauge'
 import CustomMultiGauge from '../../components/CustomMultiGauge'
 import CustomBarChart from '../../components/CustomBarChart'
-
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import Typography from '@mui/material/Typography'
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import Divider from '@mui/material/Divider'
@@ -178,28 +176,6 @@ const Dashboard = () => {
                   </Stack>
                   <div>1</div>
                 </Stack>{' '}
-                {/* <div className='d-flex flex-column match-item-team'>
-                <div className='d-flex j-between align-center'>
-                  <div>
-                    <img
-                      className='team-mark-small'
-                      src='https://lsm-static-prod.livescore.com/medium/enet/8633.png'
-                    />
-                    <span>Leral Madrid</span>
-                  </div>
-                  <div>1</div>
-                </div>
-                <div className='d-flex j-between align-center'>
-                  <div>
-                    <img
-                      className='team-mark-small'
-                      src='https://lsm-static-prod.livescore.com/medium/enet/8633.png'
-                    />
-                    <span>Leral Madrid</span>
-                  </div>
-                  <div>1</div>
-                </div>
-              </div> */}
               </div>
             ))}
           </div>

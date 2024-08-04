@@ -96,19 +96,6 @@ export const columns = [
     width: 150,
     editable: false
   },
-  //   {
-  //     field: 'Position',
-  //     headerName: 'Position',
-  //     width: 150,
-  //     align: 'left',
-  //     headerAlign: 'left',
-  //     type: 'singleSelect',
-  //     valueOptions: ['Goal Keeper', 'Defender', 'Midfielder'],
-  //     editable: true,
-  //     valueFormatter: (value, row, func) => {
-  //       return func.valueOptions[value]
-  //     }
-  //   },
 
   {
     field: 'status',
@@ -183,10 +170,6 @@ export function EditToolbar (props) {
           onChange={requestSearch}
         />
       </Search>
-      {/* <button className='pull-btn' color='primary' onClick={handleOpen}>
-        <PersonAddAltOutlinedIcon />
-        &nbsp;&nbsp;add player into squad
-      </button> */}
 
       <Dialog open={open} onClose={handleClose}>
         <div className='bg-[#061727]'>

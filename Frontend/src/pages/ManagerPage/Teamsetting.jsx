@@ -1,77 +1,37 @@
 import React, { useState } from 'react'
-// import * as React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
-
-import Box from '@mui/material/Box'
-
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Stack from '@mui/material/Stack'
+import { Box, Typography, IconButton, OutlinedInput, InputAdornment, FormControl, Stack, Avatar, DialogContent } from '@mui/material'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import ContactEmergencyOutlined from '@mui/icons-material/ContactEmergencyOutlined'
 
-import { styled } from '@mui/material/styles'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import CloseIcon from '@mui/icons-material/Close'
-import { ContactEmergencyOutlined, LogoDev } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
-
-const ImgUpload = ({ onChange, src }) => (
-  <label htmlFor='photo-upload' className='custom-file-upload fas'>
-    <div className='img-wrap img-upload'>
-      <img for='photo-upload' src={src} />
-    </div>
-    <input id='photo-upload' type='file' onChange={onChange} />
-  </label>
-)
 const Teamsetting = () => {
-  const [state, setState] = React.useState({
-    file: '',
-    imagePreviewUrl:
-      'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true',
-    name: '',
-    password: '',
-    active: 'edit'
-  })
   const defaultLogoUrl = 'https://your-default-logo-url.com/logo.png'
   const [logoUrl, setLogoUrl] = useState(defaultLogoUrl)
 
-  const handleImageChange = event => {
+  const handleImageChange = (event) => {
     const file = event.target.files[0]
     if (file) {
       const imageUrl = URL.createObjectURL(file)
       setLogoUrl(imageUrl)
     }
   }
+
   return (
     <>
-      <DialogContent dividers sx={{ backgroundColo: '5d4', border: 'none' }}>
+      <DialogContent dividers sx={{ backgroundColor: '#000', border: 'none' }}>
         <div className='d-flex align-center sign-form'>
           <Box className='ml-[50px] max-md:ml-0'>
             <Typography variant='h4' gutterBottom>
               Team Detail
             </Typography>
-            <FormControl sx={{ m: 1 }} fullWidth variant='outlined'>
+            <FormControl sx={{ mb: 2 }} fullWidth variant='outlined'>
               <OutlinedInput
                 id='outlined-adornment-logo'
                 type='file'
                 onChange={handleImageChange}
                 startAdornment={
                   <InputAdornment position='start'>
-                    <Avatar
-                      src={logoUrl}
-                      alt='Logo'
-                      sx={{ width: 24, height: 24 }}
-                    />
+                    <Avatar src={logoUrl} alt='Logo' sx={{ width: 24, height: 24 }} />
                   </InputAdornment>
                 }
                 endAdornment={
@@ -81,16 +41,23 @@ const Teamsetting = () => {
                       component='label'
                       htmlFor='outlined-adornment-logo'
                       edge='end'
+                      sx={{ fontSize: '0.8rem', p: 0.5 }}
                     >
                       Change Logo
                     </IconButton>
                   </InputAdornment>
                 }
                 placeholder='Change logo'
+                sx={{
+                  color: '#fff',
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' },
+                  '& .MuiOutlinedInput-input': { padding: '10px 14px' },
+                  '& .MuiInputAdornment-root': { fontSize: '0.8rem' }
+                }}
               />
             </FormControl>
 
-            <FormControl sx={{ m: 1 }} fullWidth variant='outlined'>
+            <FormControl sx={{ mb: 2 }} fullWidth variant='outlined'>
               <OutlinedInput
                 id='outlined-adornment-email'
                 type='text'
@@ -100,9 +67,11 @@ const Teamsetting = () => {
                     <EmailOutlinedIcon />
                   </InputAdornment>
                 }
+                sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' } }}
               />
             </FormControl>
-            <FormControl sx={{ m: 1 }} fullWidth variant='outlined'>
+
+            <FormControl sx={{ mb: 2 }} fullWidth variant='outlined'>
               <OutlinedInput
                 id='outlined-adornment-password'
                 type='password'
@@ -114,18 +83,19 @@ const Teamsetting = () => {
                 }
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      edge='end'
-                    ></IconButton>
+                    <IconButton aria-label='toggle password visibility' edge='end'>
+                      {/* Add password visibility logic here */}
+                    </IconButton>
                   </InputAdornment>
                 }
+                sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' } }}
               />
             </FormControl>
-            <FormControl sx={{ m: 1 }} fullWidth variant='outlined'>
+
+            <FormControl sx={{ mb: 2 }} fullWidth variant='outlined'>
               <OutlinedInput
-                id='outlined-adornment-password'
-                type='password'
+                id='outlined-adornment-email'
+                type='email'
                 placeholder='Change Email'
                 startAdornment={
                   <InputAdornment position='start'>
@@ -134,18 +104,19 @@ const Teamsetting = () => {
                 }
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      edge='end'
-                    ></IconButton>
+                    <IconButton aria-label='toggle password visibility' edge='end'>
+                      {/* Add password visibility logic here */}
+                    </IconButton>
                   </InputAdornment>
                 }
+                sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' } }}
               />
             </FormControl>
-            <FormControl sx={{ m: 1 }} fullWidth variant='outlined'>
+
+            <FormControl sx={{ mb: 2 }} fullWidth variant='outlined'>
               <OutlinedInput
-                id='outlined-adornment-password'
-                type='password'
+                id='outlined-adornment-contact'
+                type='text'
                 placeholder='Change Contact'
                 startAdornment={
                   <InputAdornment position='start'>
@@ -154,29 +125,28 @@ const Teamsetting = () => {
                 }
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      edge='end'
-                    ></IconButton>
+                    <IconButton aria-label='toggle contact visibility' edge='end'>
+                      {/* Add contact visibility logic here */}
+                    </IconButton>
                   </InputAdornment>
                 }
+                sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: '#fff' } }}
               />
             </FormControl>
 
-            <Stack
-              direction={'row'}
-              alignItems={'center'}
-              justifyContent={'space-between'}
-            >
-              {/* <FormControlLabel control={<Checkbox />} label='Remember me' /> */}
+            <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              {/* Optional: Add remember me checkbox or other elements here */}
             </Stack>
-            <button
-              //               onClick={handleLogin}
-              className='pull-btn text-center text-dark w-[20%] max-md:w-full'
-              style={{ marginTop: '20px' }}
-            >
-              save
-            </button>
+
+            <Box textAlign='center'>
+              <button
+                // onClick={handleSave}
+                className='pull-btn text-center text-dark'
+                style={{ width: '100px', marginTop: '20px', backgroundColor: '#FFC107', color: '#000' }}
+              >
+                Save
+              </button>
+            </Box>
           </Box>
         </div>
       </DialogContent>
