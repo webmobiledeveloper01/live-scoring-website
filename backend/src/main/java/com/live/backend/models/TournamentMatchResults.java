@@ -1,6 +1,6 @@
 package com.live.backend.models;
 
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,11 +32,11 @@ public class TournamentMatchResults {
     private String result_data;
 
     @Column(name = "created_at", nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
 
     @Column(name = "deleted_at", nullable = true)
-    private Timestamp deleted_at;
+    private LocalDateTime deleted_at;
 }

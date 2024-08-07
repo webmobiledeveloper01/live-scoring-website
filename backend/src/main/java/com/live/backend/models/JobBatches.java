@@ -1,6 +1,6 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,11 +41,11 @@ public class JobBatches {
     private String options;
 
     @Column(name = "cancelled_at", nullable = true)
-    private Timestamp cancelled_at;
+    private LocalDateTime cancelled_at;
 
     @Column(name = "created_at", nullable = false)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(name = "finished_at", nullable = true)
-    private Timestamp finished_at;
+    private LocalDateTime finished_at;
 }

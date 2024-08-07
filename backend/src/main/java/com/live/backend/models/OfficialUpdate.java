@@ -1,6 +1,6 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,8 +29,8 @@ public class OfficialUpdate {
     private int status;
 
     @Column(name = "created_at", nullable = true)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 }

@@ -1,6 +1,6 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,15 +42,15 @@ public class PersonalAccessTokens {
     private String abilities;
 
     @Column(name = "last_used_at", nullable = true)
-    private Timestamp last_used_at;
+    private LocalDateTime last_used_at;
 
     @Column(name = "expires_at", nullable = true)
-    private Timestamp expires_at;
+    private LocalDateTime expires_at;
 
     @Column(name = "created_at", nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
 
 }
