@@ -1,10 +1,9 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ public class PasswordResetTokens {
     private String token;
 
     @Column(nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
 
 }

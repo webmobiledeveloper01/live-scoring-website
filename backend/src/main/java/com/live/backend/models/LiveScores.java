@@ -1,5 +1,6 @@
 package com.live.backend.models;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,10 +27,10 @@ public class LiveScores {
     private Long id;
 
     @Column(nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(nullable = true)
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
 
 
 }

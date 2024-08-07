@@ -1,6 +1,7 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,12 +34,12 @@ public class Jobs {
     private int attempts;
 
     @Column(name = "reserved_at", nullable = true)
-    private Timestamp reserved_at;
+    private LocalDateTime reserved_at;
 
     @Column(name = "available_at", nullable = false)
-    private Timestamp available_at;
+    private LocalDateTime available_at;
 
     @Column(name = "created_at", nullable = false)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
 }

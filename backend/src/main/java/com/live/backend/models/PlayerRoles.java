@@ -1,6 +1,7 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,13 +33,13 @@ public class PlayerRoles {
     private int status;
 
     @Column(nullable = true)
-    private Timestamp deleted_at;
+    private LocalDateTime deleted_at;
 
     @Column(nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(nullable = true)
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
 
 }
 

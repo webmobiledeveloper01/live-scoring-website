@@ -1,6 +1,7 @@
 package com.live.backend.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +42,6 @@ public class FailedJobs {
     private String exception;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = true)
-    private Timestamp failed_at;
+    private LocalDateTime failed_at;
 
 }

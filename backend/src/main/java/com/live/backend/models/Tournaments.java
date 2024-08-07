@@ -1,7 +1,7 @@
 package com.live.backend.models;
 
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -48,11 +48,11 @@ public class Tournaments {
     private int status = 1;
 
     @Column(name = "created_at", nullable = true)
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
 
     @Column(name = "deleted_at", nullable = true)
-    private Timestamp deleted_at;
+    private LocalDateTime deleted_at;
 }
