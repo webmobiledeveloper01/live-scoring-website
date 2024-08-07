@@ -90,22 +90,22 @@ function UserPage() {
           <Box>{renderPage}</Box>
         </Box>
         {teamInfo.type === 'team' && (
-          <Box sx={{ flexShrink: 0, width: { xs: '100%', md: 300 } }}>
+          <Box sx={{ flexShrink: 0, width: { xs: '100%', md: 300 }, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <List
               subheader={<ListSubheader>Winning Percentage</ListSubheader>}
-              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               <CustomGauge value={75} />
             </List>
             <List
               subheader={<ListSubheader>Match History</ListSubheader>}
-              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               <CustomBarChart value={75} />
             </List>
             <List
               subheader={<ListSubheader>Team Performance</ListSubheader>}
-              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2 }}
+              sx={{ bgcolor: 'background.paper', borderRadius: 1, mb: 2, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               <CustomMultiGauge />
             </List>
