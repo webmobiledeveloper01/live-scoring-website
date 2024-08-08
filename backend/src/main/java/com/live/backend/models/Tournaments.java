@@ -40,7 +40,7 @@ public class Tournaments {
     private Date end_date;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sponsor_id", nullable = true)
+    @JoinColumn(name = "sponsor_id",nullable = true)
     private TournamentSponsers sponsor; 
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(4) DEFAULT 1")
