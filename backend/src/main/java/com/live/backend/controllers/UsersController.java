@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.live.backend.models.Users;
+import com.live.backend.dto.UserDTO;
 import com.live.backend.services.UsersService;
 
 @RestController
@@ -19,21 +19,21 @@ public class UsersController {
     private UsersService usersService;
 
     @GetMapping
-    public ResponseEntity<List<Users>> getAllUsers() {
-        List<Users> users = usersService.findAll();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = usersService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Users> getUserById(@PathVariable Long id) {
-        Optional<Users> user = usersService.findById(id);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        Optional<UserDTO> user = usersService.findById(id);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                   .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<Users> getUserByEmail(@PathVariable String email) {
-        Users user = usersService.findByEmail(email);
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+        UserDTO user = usersService.findByEmail(email);
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
@@ -42,20 +42,15 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        Users savedUser = usersService.save(user);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        UserDTO savedUser = usersService.createUser(userDTO);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users user) {
-        Optional<Users> existingUser = usersService.findById(id);
-        if (existingUser.isPresent()) {
-            Users updatedUser = usersService.save(user);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        UserDTO updatedUser = usersService.updateUser(id, userDTO);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

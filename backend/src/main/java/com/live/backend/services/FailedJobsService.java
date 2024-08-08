@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.live.backend.models.FailedJobs;
 import com.live.backend.repos.FailedJobsRepository;
 
@@ -24,6 +25,23 @@ public class FailedJobsService {
 
     public FailedJobs save(FailedJobs failedJobs) {
         return failedJobsRepository.save(failedJobs);
+    }
+
+    public FailedJobs updateFailedJob(Long id, FailedJobs failedJobs) {
+        Optional<FailedJobs> existingFailedJobOpt = failedJobsRepository.findById(id);
+        if (existingFailedJobOpt.isPresent()) {
+            FailedJobs existingFailedJob = existingFailedJobOpt.get();
+            existingFailedJob.setUuid(failedJobs.getUuid());
+            existingFailedJob.setConnection(failedJobs.getConnection());
+            existingFailedJob.setQueue(failedJobs.getQueue());
+            existingFailedJob.setPayload(failedJobs.getPayload());
+            existingFailedJob.setException(failedJobs.getException());
+            existingFailedJob.setFailed_at(failedJobs.getFailed_at());
+
+            return failedJobsRepository.save(existingFailedJob);
+        } else {
+            throw new RuntimeException("FailedJob not found with ID: " + id);
+        }
     }
 
     public void deleteById(Long id) {

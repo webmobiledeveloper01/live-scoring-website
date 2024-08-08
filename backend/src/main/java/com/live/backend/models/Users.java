@@ -1,15 +1,11 @@
 package com.live.backend.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,48 +19,35 @@ import lombok.Setter;
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date email_verified_at;
+    @Column(columnDefinition = "DATETIME DEFAULT NULL")
+    private LocalDateTime email_verified_at;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "TINYINT(4) DEFAULT 1",nullable = false)
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1", nullable = false)
     private int role;
 
-    @Column(columnDefinition = "TINYINT(4) DEFAULT 1",nullable = false)
+    @Column(columnDefinition = "TINYINT(4) DEFAULT 1", nullable = false)
     private int status;
 
     private String remember_token;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
-    private Date created_at;
+    private LocalDateTime created_at;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date updated_at;
+    private LocalDateTime updated_at;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleted_at;
-
-    @PrePersist
-    protected void onCreate() {
-        created_at = new Date();
-        updated_at = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updated_at = new Date();
-    }
+    @Column(columnDefinition = "DATETIME DEFAULT NULL")
+    private LocalDateTime deleted_at;
 }

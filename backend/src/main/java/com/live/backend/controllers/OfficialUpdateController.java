@@ -39,18 +39,21 @@ public class OfficialUpdateController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OfficialUpdate> updateOfficialUpdate(@PathVariable Long id, @RequestBody OfficialUpdate officialUpdate) {
-        Optional<OfficialUpdate> existingUpdate = officialUpdateService.findById(id);
-        if (existingUpdate.isPresent()) {
-            OfficialUpdate updatedUpdate = officialUpdateService.save(officialUpdate);
+        try {
+            OfficialUpdate updatedUpdate = officialUpdateService.updateOfficialUpdate(id, officialUpdate);
             return new ResponseEntity<>(updatedUpdate, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOfficialUpdate(@PathVariable Long id) {
-        officialUpdateService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            officialUpdateService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

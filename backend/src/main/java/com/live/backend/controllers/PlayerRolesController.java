@@ -5,14 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.live.backend.models.PlayerRoles;
 import com.live.backend.services.PlayerRolesService;
@@ -25,8 +18,9 @@ public class PlayerRolesController {
     private PlayerRolesService playerRolesService;
 
     @GetMapping
-    public List<PlayerRoles> getAllPlayerRoles() {
-        return playerRolesService.getAllPlayerRoles();
+    public ResponseEntity<List<PlayerRoles>> getAllPlayerRoles() {
+        List<PlayerRoles> playerRoles = playerRolesService.getAllPlayerRoles();
+        return ResponseEntity.ok(playerRoles);
     }
 
     @GetMapping("/{id}")
@@ -36,8 +30,9 @@ public class PlayerRolesController {
     }
 
     @PostMapping
-    public PlayerRoles createPlayerRole(@RequestBody PlayerRoles playerRoles) {
-        return playerRolesService.createPlayerRole(playerRoles);
+    public ResponseEntity<PlayerRoles> createPlayerRole(@RequestBody PlayerRoles playerRoles) {
+        PlayerRoles createdPlayerRole = playerRolesService.createPlayerRole(playerRoles);
+        return ResponseEntity.status(201).body(createdPlayerRole);
     }
 
     @PutMapping("/{id}")
