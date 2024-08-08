@@ -41,7 +41,7 @@ public class SessionsController {
     public ResponseEntity<Sessions> updateSession(@PathVariable String id, @RequestBody Sessions session) {
         Optional<Sessions> existingSession = sessionsService.findById(id);
         if (existingSession.isPresent()) {
-            Sessions updatedSession = sessionsService.save(session);
+            Sessions updatedSession = sessionsService.updateSession(id, session);
             return new ResponseEntity<>(updatedSession, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

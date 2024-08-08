@@ -39,11 +39,10 @@ public class TournamentMatchResultsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TournamentMatchResults> updateTournamentMatchResult(@PathVariable Long id, @RequestBody TournamentMatchResults tournamentMatchResults) {
-        Optional<TournamentMatchResults> existingResult = tournamentMatchResultsService.findById(id);
-        if (existingResult.isPresent()) {
-            TournamentMatchResults updatedResult = tournamentMatchResultsService.save(tournamentMatchResults);
+        try {
+            TournamentMatchResults updatedResult = tournamentMatchResultsService.updateTournamentMatchResult(id, tournamentMatchResults);
             return new ResponseEntity<>(updatedResult, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

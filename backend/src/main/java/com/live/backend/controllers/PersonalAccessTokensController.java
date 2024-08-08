@@ -1,6 +1,5 @@
 package com.live.backend.controllers;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ public class PersonalAccessTokensController {
     public ResponseEntity<PersonalAccessTokens> updatePersonalAccessToken(@PathVariable Long id, @RequestBody PersonalAccessTokens personalAccessTokens) {
         Optional<PersonalAccessTokens> existingToken = personalAccessTokensService.findById(id);
         if (existingToken.isPresent()) {
-            PersonalAccessTokens updatedToken = personalAccessTokensService.save(personalAccessTokens);
+            PersonalAccessTokens updatedToken = personalAccessTokensService.updatePersonalAccessToken(id, personalAccessTokens);
             return new ResponseEntity<>(updatedToken, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

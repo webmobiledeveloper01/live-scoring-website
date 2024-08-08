@@ -39,11 +39,10 @@ public class PlayerStaticsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PlayerStatics> updatePlayerStatics(@PathVariable Long id, @RequestBody PlayerStatics playerStatics) {
-        Optional<PlayerStatics> existingPlayerStatics = playerStaticsService.findById(id);
-        if (existingPlayerStatics.isPresent()) {
-            PlayerStatics updatedPlayerStatics = playerStaticsService.save(playerStatics);
+        try {
+            PlayerStatics updatedPlayerStatics = playerStaticsService.updatePlayerStatics(id, playerStatics);
             return new ResponseEntity<>(updatedPlayerStatics, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
