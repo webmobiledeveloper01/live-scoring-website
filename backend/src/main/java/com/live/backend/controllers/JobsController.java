@@ -1,6 +1,5 @@
 package com.live.backend.controllers;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,11 +39,10 @@ public class JobsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Jobs> updateJob(@PathVariable Long id, @RequestBody Jobs job) {
-        Optional<Jobs> existingJob = jobsService.findById(id);
-        if (existingJob.isPresent()) {
-            Jobs updatedJob = jobsService.save(job);
+        try {
+            Jobs updatedJob = jobsService.updateJob(id, job);
             return new ResponseEntity<>(updatedJob, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -1,5 +1,6 @@
 package com.live.backend.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class TeamStaticsService {
     }
 
     public TeamStatics save(TeamStatics teamStatic) {
+        teamStatic.setCreated_at(LocalDateTime.now());
+        teamStatic.setUpdated_at(LocalDateTime.now());
+        teamStatic.setDeleted_at(null);
         return teamStaticsRepository.save(teamStatic);
     }
 
@@ -35,7 +39,7 @@ public class TeamStaticsService {
             existingTeamStatic.setTournament_id(teamStatic.getTournament_id());
             existingTeamStatic.setPerformance_data(teamStatic.getPerformance_data());
             existingTeamStatic.setCreated_at(teamStatic.getCreated_at());
-            existingTeamStatic.setUpdated_at(teamStatic.getUpdated_at());
+            existingTeamStatic.setUpdated_at(LocalDateTime.now());
             existingTeamStatic.setDeleted_at(teamStatic.getDeleted_at());
 
             return teamStaticsRepository.save(existingTeamStatic);
