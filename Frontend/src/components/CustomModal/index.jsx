@@ -229,7 +229,7 @@ export default function CustomizedDialogs () {
                 <OutlinedInput
                   id='outlined-adornment-email'
                   type='text'
-                  placeholder='User name'
+                  placeholder='User mail'
                   startAdornment={
                     <InputAdornment position='start'>
                       <EmailOutlinedIcon />
