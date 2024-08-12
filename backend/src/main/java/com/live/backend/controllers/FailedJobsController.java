@@ -13,6 +13,7 @@ import com.live.backend.services.FailedJobsService;
 
 @RestController
 @RequestMapping("/api/failed-jobs")
+@CrossOrigin("*")
 public class FailedJobsController {
 
     @Autowired

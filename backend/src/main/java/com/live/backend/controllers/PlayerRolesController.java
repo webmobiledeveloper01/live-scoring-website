@@ -12,6 +12,7 @@ import com.live.backend.services.PlayerRolesService;
 
 @RestController
 @RequestMapping("/api/playerRoles")
+@CrossOrigin("*")
 public class PlayerRolesController {
 
     @Autowired

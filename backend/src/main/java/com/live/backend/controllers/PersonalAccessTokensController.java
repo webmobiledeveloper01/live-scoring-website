@@ -13,6 +13,7 @@ import com.live.backend.services.PersonalAccessTokensService;
 
 @RestController
 @RequestMapping("/api/personal-access-tokens")
+@CrossOrigin("*")
 public class PersonalAccessTokensController {
 
     @Autowired

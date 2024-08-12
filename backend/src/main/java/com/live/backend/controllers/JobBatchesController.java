@@ -13,6 +13,7 @@ import com.live.backend.services.JobBatchesService;
 
 @RestController
 @RequestMapping("/api/job-batches")
+@CrossOrigin("*")
 public class JobBatchesController {
 
     @Autowired
