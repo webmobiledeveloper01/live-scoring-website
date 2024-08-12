@@ -42,4 +42,12 @@ public class TournamentMatchResults {
 
     @Column(name = "deleted_at", nullable = true)
     private LocalDateTime deleted_at;
+
+    public long getTournament_match_id() {
+        return this.id;
+    }
+
+    public void setTournament_match_id(long tournament_match_id) {
+        this.id=tournament_match_id;
+    }
 }

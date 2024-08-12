@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
@@ -15,6 +16,7 @@ import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined'
 import { selectSidebarItem } from '../../../redux/actions/sidebar'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/actions/auth'
+import axios from 'axios'
 
 export default function UserDrawer() {
   const dispatch = useDispatch()
@@ -24,58 +26,38 @@ export default function UserDrawer() {
     navigate('/')
     dispatch(selectSidebarItem(data))
   }
-  const competitionMenus = [
-    {
-      type: 'competition',
-      text: 'Premier League',
-      subtext: 'England',
-      icon: 'https://static.livescore.com/i2/fh/england.jpg'
-    },
-    {
-      type: 'competition',
-      text: 'Champions League',
-      subtext: 'England',
-      icon: 'https://static.livescore.com/i2/fh/champions-league.jpg'
-    },
-    {
-      type: 'competition',
-      text: 'Laliga',
-      subtext: 'Spain',
-      icon: 'https://static.livescore.com/i2/fh/spain.jpg'
-    },
-    {
-      type: 'competition',
-      text: 'Sarie A',
-      subtext: 'Italy',
-      icon: 'https://static.livescore.com/i2/fh/italy.jpg'
-    },
-    {
-      type: 'competition',
-      text: 'Bundesliga',
-      subtext: 'Germany',
-      icon: 'https://static.livescore.com/i2/fh/germany.jpg'
+
+  const [teamMenus, setTeamMenus] = useState([])
+  const [competitionMenus, setCompetitionMenus] = useState([])
+
+  useEffect(() => {
+    const fetchTeamsAndTournaments = async () => {
+      try {
+        const teamsResponse = await axios.get('http://localhost:8080/api/teams')
+        const tournamentsResponse = await axios.get('http://localhost:8080/api/tournaments')
+
+        const teams = teamsResponse.data.map(team => ({
+          type: 'team',
+          text: team.name,
+          icon: team.logo
+        }))
+
+        const tournaments = tournamentsResponse.data.map(tournament => ({
+          type: 'competition',
+          text: tournament.name,
+          icon: tournament.logo
+        }))
+
+        setTeamMenus(teams)
+        setCompetitionMenus(tournaments)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     }
-  ]
-  const teamMenus = [
-    {
-      type: 'team',
-      text: 'Liverpool',
-      subtext: 'England',
-      icon: 'https://lsm-static-prod.livescore.com/medium/enet/8650.png'
-    },
-    {
-      type: 'team',
-      text: 'Arsenal',
-      subtext: 'England',
-      icon: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png'
-    },
-    {
-      type: 'team',
-      text: 'Real Madrid',
-      subtext: 'Spain',
-      icon: 'https://lsm-static-prod.livescore.com/medium/enet/8633.png'
-    }
-  ]
+
+    fetchTeamsAndTournaments()
+  }, [])
+
   const regionMenus = [
     { text: 'England', icon: 'https://static.livescore.com/i2/fh/england.jpg' },
     { text: 'Spain', icon: 'https://static.livescore.com/i2/fh/spain.jpg' },
@@ -121,7 +103,7 @@ export default function UserDrawer() {
               <ListItemIcon>
                 <img src={item.icon} width={20} />
               </ListItemIcon>
-              <ListItemText primary={item.text} secondary={item.subtext} />
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -157,7 +139,7 @@ export default function UserDrawer() {
               <ListItemIcon>
                 <img src={item.icon} width={20} />
               </ListItemIcon>
-              <ListItemText primary={item.text} secondary={item.subtext} />
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
