@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -19,8 +21,9 @@ public class TournamentMatchResults {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "tournament_match_id", nullable = false)
-    private Long tournament_match_id;
+    @ManyToOne
+    @JoinColumn(name = "tournament_matches_id", nullable = false)
+    private TournamentMatches TournamentMatches;
 
     @Column(name = "result_type", length = 255, nullable = true)
     private String result_type;

@@ -1,29 +1,28 @@
 import * as React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
 
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Stack from '@mui/material/Stack'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
-import { styled } from '@mui/material/styles'
+import CloseIcon from '@mui/icons-material/Close'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
-import CloseIcon from '@mui/icons-material/Close'
+import { styled } from '@mui/material/styles'
 import { openSignModal } from '../../redux/actions'
 import { setAuth } from '../../redux/actions/auth'
-import ForgotPassword from './ForgotPassword'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -63,17 +62,40 @@ export default function CustomizedDialogs () {
   const handlePassword = e => setPassword(e.target.value)
   const handleEmail = e => setEmail(e.target.value)
 
-  const handleLogin = () => {
-    if (!email) {
-      alert('enter email first')
-      return
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('Please enter email and password');
+      return;
     }
-    dispatch(setAuth({ email }))
-    if (email == 'admin') navigate('/addteam')
-    else if (email == 'manager') navigate('/dashboard')
-    // navigate('/addteam')
-    dispatch(openSignModal(false))
-  }
+  
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/email/${email}`);
+      if (response.ok) {
+        const user = await response.json();
+  
+        if (user.password === password) {
+          dispatch(setAuth({ email }));
+  
+          if (user.role === 1) {
+            navigate('/');
+          } else if (user.role === 2) {
+            navigate('/dashboard');
+          } else if (user.role === 3) {
+            navigate('/addteam');
+          }
+  
+          dispatch(openSignModal(false));
+        } else {
+          alert('Incorrect password');
+        }
+      } else {
+        alert('User not found');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+  
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
   const handleMouseDownPassword = event => {

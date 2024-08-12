@@ -13,6 +13,7 @@ import com.live.backend.services.MigrationsService;
 
 @RestController
 @RequestMapping("/api/migrations")
+@CrossOrigin("*")
 public class MigrationsController {
 
     @Autowired

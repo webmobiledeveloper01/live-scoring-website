@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,11 +37,20 @@ public class PlayerRoles {
     @Column(nullable = true)
     private LocalDateTime deleted_at;
 
-    @Column(nullable = true)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
     @Column(nullable = true)
     private LocalDateTime updated_at;
 
-}
+    @PrePersist
+    protected void onCreate() {
+        created_at = LocalDateTime.now();
+        status = 1;
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = LocalDateTime.now();
+    }
+}
