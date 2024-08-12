@@ -48,11 +48,10 @@ public class TournamentSponsersController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TournamentSponsers> updateTournamentSponser(@PathVariable Long id, @RequestBody TournamentSponsers tournamentSponser) {
-        Optional<TournamentSponsers> existingSponser = tournamentSponsersService.findById(id);
-        if (existingSponser.isPresent()) {
-            TournamentSponsers updatedSponser = tournamentSponsersService.save(tournamentSponser);
+        try {
+            TournamentSponsers updatedSponser = tournamentSponsersService.updateTournamentSponser(id, tournamentSponser);
             return new ResponseEntity<>(updatedSponser, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

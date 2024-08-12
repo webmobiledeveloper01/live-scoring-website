@@ -27,18 +27,25 @@ public class PlayerRolesService {
     public PlayerRoles createPlayerRole(PlayerRoles playerRoles) {
         playerRoles.setCreated_at(LocalDateTime.now());
         playerRoles.setStatus(1);
+        playerRoles.setUpdated_at(LocalDateTime.now());
+        playerRoles.setDeleted_at(null);
         return playerRolesRepository.save(playerRoles);
     }
 
     public PlayerRoles updatePlayerRole(Long id, PlayerRoles playerRoles) {
-        if (playerRolesRepository.existsById(id)) {
-            playerRoles.setId(id);
-            playerRoles.setUpdated_at(LocalDateTime.now());
-            return playerRolesRepository.save(playerRoles);
+        Optional<PlayerRoles> existingPlayerRoleOpt = playerRolesRepository.findById(id);
+        if (existingPlayerRoleOpt.isPresent()) {
+            PlayerRoles existingPlayerRole = existingPlayerRoleOpt.get();
+            existingPlayerRole.setName(playerRoles.getName());
+            existingPlayerRole.setStatus(playerRoles.getStatus());
+            existingPlayerRole.setUpdated_at(LocalDateTime.now());
+
+            return playerRolesRepository.save(existingPlayerRole);
         } else {
             throw new RuntimeException("PlayerRoles not found with id " + id);
         }
-    }
+    
+}
 
     public void deletePlayerRole(Long id) {
         Optional<PlayerRoles> playerRole = playerRolesRepository.findById(id);

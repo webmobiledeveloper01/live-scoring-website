@@ -48,11 +48,10 @@ public class TeamStaticsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TeamStatics> updateTeamStatic(@PathVariable Long id, @RequestBody TeamStatics teamStatic) {
-        Optional<TeamStatics> existingTeamStatic = teamStaticsService.findById(id);
-        if (existingTeamStatic.isPresent()) {
-            TeamStatics updatedTeamStatic = teamStaticsService.save(teamStatic);
+        try {
+            TeamStatics updatedTeamStatic = teamStaticsService.updateTeamStatic(id, teamStatic);
             return new ResponseEntity<>(updatedTeamStatic, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -39,11 +39,10 @@ public class JobBatchesController {
 
     @PutMapping("/{id}")
     public ResponseEntity<JobBatches> updateJobBatches(@PathVariable String id, @RequestBody JobBatches jobBatches) {
-        Optional<JobBatches> existingJobBatches = jobBatchesService.findById(id);
-        if (existingJobBatches.isPresent()) {
-            JobBatches updatedJobBatches = jobBatchesService.save(jobBatches);
+        try {
+            JobBatches updatedJobBatches = jobBatchesService.updateJobBatches(id, jobBatches);
             return new ResponseEntity<>(updatedJobBatches, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

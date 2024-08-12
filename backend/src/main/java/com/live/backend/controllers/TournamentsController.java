@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.live.backend.models.Tournaments;
+import com.live.backend.dto.TournamentDTO;
 import com.live.backend.services.TournamentsService;
 
 @RestController
@@ -28,31 +28,30 @@ public class TournamentsController {
     private TournamentsService tournamentsService;
 
     @GetMapping
-    public ResponseEntity<List<Tournaments>> getAllTournaments() {
-        List<Tournaments> tournaments = tournamentsService.findAll();
+    public ResponseEntity<List<TournamentDTO>> getAllTournaments() {
+        List<TournamentDTO> tournaments = tournamentsService.findAll();
         return new ResponseEntity<>(tournaments, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tournaments> getTournamentById(@PathVariable Long id) {
-        Optional<Tournaments> tournament = tournamentsService.findById(id);
+    public ResponseEntity<TournamentDTO> getTournamentById(@PathVariable Long id) {
+        Optional<TournamentDTO> tournament = tournamentsService.findById(id);
         return tournament.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<Tournaments> createTournament(@RequestBody Tournaments tournament) {
-        Tournaments savedTournament = tournamentsService.save(tournament);
+    public ResponseEntity<TournamentDTO> createTournament(@RequestBody TournamentDTO tournamentDTO) {
+        TournamentDTO savedTournament = tournamentsService.createTournament(tournamentDTO);
         return new ResponseEntity<>(savedTournament, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tournaments> updateTournament(@PathVariable Long id, @RequestBody Tournaments tournament) {
-        Optional<Tournaments> existingTournament = tournamentsService.findById(id);
-        if (existingTournament.isPresent()) {
-            Tournaments updatedTournament = tournamentsService.save(tournament);
+    public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody TournamentDTO tournamentDTO) {
+        try {
+            TournamentDTO updatedTournament = tournamentsService.updateTournament(id, tournamentDTO);
             return new ResponseEntity<>(updatedTournament, HttpStatus.OK);
-        } else {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
