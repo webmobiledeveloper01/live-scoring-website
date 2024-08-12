@@ -43,13 +43,11 @@ public class TournamentMatchResults {
     @Column(name = "deleted_at", nullable = true)
     private LocalDateTime deleted_at;
 
-    public Object getTournament_match_id() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTournament_match_id'");
+    public long getTournament_match_id() {
+        return this.id;
     }
 
-    public void setTournament_match_id(Object tournament_match_id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTournament_match_id'");
+    public void setTournament_match_id(long tournament_match_id) {
+        this.id=tournament_match_id;
     }
 }
