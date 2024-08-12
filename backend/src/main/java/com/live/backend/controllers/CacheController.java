@@ -12,6 +12,7 @@ import com.live.backend.services.CacheService;
 
 @RestController
 @RequestMapping("/api/cache")
+@CrossOrigin("*")
 public class CacheController {
 
     @Autowired

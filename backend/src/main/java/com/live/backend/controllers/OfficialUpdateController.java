@@ -13,6 +13,7 @@ import com.live.backend.services.OfficialUpdateService;
 
 @RestController
 @RequestMapping("/api/official-updates")
+@CrossOrigin("*")
 public class OfficialUpdateController {
 
     @Autowired

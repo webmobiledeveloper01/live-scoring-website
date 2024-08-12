@@ -13,6 +13,7 @@ import com.live.backend.services.LiveScoresService;
 
 @RestController
 @RequestMapping("/api/live-scores")
+@CrossOrigin("*")
 public class LiveScoresController {
 
     @Autowired
