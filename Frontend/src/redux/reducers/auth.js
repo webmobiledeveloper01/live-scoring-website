@@ -2,6 +2,7 @@ import { SET_AUTH } from '../actions/types';
 
 // Initial State Alerts
 const initialState = {
+    name:"",
     authentification:false,
     role:"common"
 };

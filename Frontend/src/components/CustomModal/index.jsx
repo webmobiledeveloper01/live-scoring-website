@@ -74,13 +74,16 @@ export default function CustomizedDialogs () {
         const user = await response.json();
   
         if (user.password === password) {
-          dispatch(setAuth({ email }));
-  
-          if (user.role === 1) {
+          if (user.role==1){
+            dispatch(setAuth({name:user.name, role:"common"  }));
             navigate('/');
-          } else if (user.role === 2) {
+            
+          }
+          else if (user.role === 2) {
+            dispatch(setAuth({name:user.name, role:"manager"  }));
             navigate('/dashboard');
           } else if (user.role === 3) {
+            dispatch(setAuth({name:user.name, role:"admin"  }));
             navigate('/addteam');
           }
   

@@ -1,21 +1,19 @@
+import List from '@mui/material/List'
+import clsx from 'clsx'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Main, DrawerHeader } from '../../styled'
-import Overview from './competitions/Overview'
-import Matches from './competitions/Matches'
-import Standing from './competitions/Standing'
-import TeamOverview from './teams/Overview'
-import TeamMatches from './teams/Matches'
-import TeamStanding from './teams/Standing'
-import Squad from './teams/Squad'
-import Transfer from './teams/Transfer'
-import clsx from 'clsx'
-import List from '@mui/material/List'
+import { useNavigate } from 'react-router-dom'
+import CustomBarChart from '../../components/CustomBarChart'
 import CustomGauge from '../../components/CustomGauge'
 import CustomMultiGauge from '../../components/CustomMultiGauge'
-import CustomBarChart from '../../components/CustomBarChart'
-import AdminDrawer from '../../components/Layout/drawer/AdminDrawer'
-import { useNavigate } from 'react-router-dom'
+import Matches from './competitions/Matches'
+import Overview from './competitions/Overview'
+import Standing from './competitions/Standing'
+import TeamMatches from './teams/Matches'
+import TeamOverview from './teams/Overview'
+import Squad from './teams/Squad'
+import TeamStanding from './teams/Standing'
+import Transfer from './teams/Transfer'
 function Home () {
   const [select, setSelect] = React.useState(0)
   const [renderPage, setRenderPage] = React.useState(<Overview />)
@@ -62,7 +60,7 @@ function Home () {
   const navigate = useNavigate()
   // const dispatch = useDispatch()
 
-  const { authentification, role } = useSelector(state => state.auth)
+  const { name, authentification, role } = useSelector(state => state.auth)
   const handleClick = url => {
     navigate(url)
   }

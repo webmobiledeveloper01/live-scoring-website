@@ -72,6 +72,9 @@ function NewsPage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
+      
+
+      <Main open={open}>
       <Box sx={{ mt: 6, mb: 3 }}>
         <ToggleButtonGroup
           value={currentSource}
@@ -86,8 +89,6 @@ function NewsPage() {
           ))}
         </ToggleButtonGroup>
       </Box>
-
-      <Main open={open}>
         <Grid container spacing={3}>
           {currentNewsList.map((news, index) => (
             <Grid item xs={12} key={index}>
