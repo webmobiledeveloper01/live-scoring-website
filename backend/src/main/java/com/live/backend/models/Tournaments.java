@@ -2,6 +2,9 @@ package com.live.backend.models;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,8 +43,9 @@ public class Tournaments {
     private Date end_date;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sponsor_id",nullable = true)
-    private TournamentSponsers sponsor; 
+    @JoinColumn(name = "sponsor_id", nullable = true)
+    @JsonIgnore
+    private TournamentSponsers sponsor;
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(4) DEFAULT 1")
     private int status = 1;
