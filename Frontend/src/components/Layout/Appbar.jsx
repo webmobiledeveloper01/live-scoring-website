@@ -1,28 +1,28 @@
-import * as React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import LoginIcon from '@mui/icons-material/Login'
+import MenuIcon from '@mui/icons-material/Menu'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined'
+import ScoreboardOutlinedIcon from '@mui/icons-material/ScoreboardOutlined'
+import SearchIcon from '@mui/icons-material/Search'
+import { Avatar, Divider, List, Menu, MenuItem, Typography, useMediaQuery, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
-import IconButton from '@mui/material/IconButton'
-import Fab from '@mui/material/Fab'
 import Drawer from '@mui/material/Drawer'
-import { Avatar, Divider, List, Typography, useMediaQuery, useTheme, Menu, MenuItem } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import LoginIcon from '@mui/icons-material/Login'
-import SearchIcon from '@mui/icons-material/Search'
-import ScoreboardOutlinedIcon from '@mui/icons-material/ScoreboardOutlined'
-import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined'
-import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined'
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import UserDrawer from './drawer/UserDrawer'
+import Fab from '@mui/material/Fab'
+import IconButton from '@mui/material/IconButton'
+import * as React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { handleDrawer, openSignModal } from '../../redux/actions'
+import { AppBar, drawerWidth, Logo, Search, SearchIconWrapper, StyledInputBase, TopToolbar } from '../../styled'
+import CustomModal from '../CustomModal'
+import CustomTabs from '../CustomTabs'
 import AdminDrawer from './drawer/AdminDrawer'
 import ManagerDrawer from './drawer/ManagerDrawer'
+import UserDrawer from './drawer/UserDrawer'
 import SiteLogo from './SiteLogo'
-import CustomTabs from '../CustomTabs'
-import CustomModal from '../CustomModal'
-import { openSignModal, handleDrawer } from '../../redux/actions'
-import { Search, SearchIconWrapper, StyledInputBase, AppBar, TopToolbar, drawerWidth, Logo } from '../../styled'
 
 export default function PersistentDrawerRight () {
   const [menuIndex, setMenuIndex] = React.useState(0)
@@ -30,7 +30,7 @@ export default function PersistentDrawerRight () {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [moreAnchorEl, setMoreAnchorEl] = React.useState(null)
   const dispatch = useDispatch()
-  const { authentification, role } = useSelector(state => state.auth)
+  const { name, authentification, role } = useSelector(state => state.auth)
   const open = useSelector(state => state.drawer.open)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -219,7 +219,7 @@ export default function PersistentDrawerRight () {
               src='/images/avatar/manager.jpg'
               sx={{ margin: 'auto', width: 90, height: 90, marginBottom: 1 }}
             />
-            <h5>courtney Henry</h5>
+            <h5>{name}</h5>
             <Typography variant='subtitle1' gutterBottom>
               {authentification && role === 'manager' ? 'Manager' : 'Super Admin'}
             </Typography>

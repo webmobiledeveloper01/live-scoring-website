@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import Loading from '../pages/Landing'
 
-import Landing from '../pages/Landing'
 import Appbar from '../components/Layout/Appbar'
-import Test from '../pages/Test'
-import NotFound from '../pages/Errors/NotFound'
-import ManagerPage from '../pages/ManagerPage'
-import AdminPage from '../pages/AdminPage'
-import UserPage from '../pages/UserPage'
-import FavouritePage from '../pages/FavouritePage'
-import NewsPage from '../pages/NewsPage'
 import AccountPage from '../pages/AccountPage'
-import TeamRegistrationForm from '../pages/Addteam/TeamRegistrationForm'
+import AdminPage from '../pages/AdminPage'
+import NotFound from '../pages/Errors/NotFound'
+import FavouritePage from '../pages/FavouritePage'
+import Landing from '../pages/Landing'
+import ManagerPage from '../pages/ManagerPage'
+import NewsPage from '../pages/NewsPage'
+import UserPage from '../pages/UserPage'
 
 import ForgotPassword from '../components/CustomModal/ForgotPassword'
-import Createteam from '../pages/CreateTeam/TeamManager'
-import TeamManager from '../pages/AdminPage/TeamManager'
+import Livescore from '../pages/AdminPage/Livescore'
 import NotificationList from '../pages/AdminPage/NotificationList'
 import NotificationManager from '../pages/AdminPage/NotificationManager'
-import SquadPage from '../pages/ManagerPage/SquadPage'
-import OfficalPage from '../pages/ManagerPage/OfficalPage'
+import TeamManager from '../pages/AdminPage/TeamManager'
+import Createteam from '../pages/CreateTeam/TeamManager'
+import Dashboard from '../pages/ManagerPage/Dashboard'
 import JerseyPage from '../pages/ManagerPage/JerseyPage'
 import MatchPage from '../pages/ManagerPage/MatchPage'
-import TransferPage from '../pages/ManagerPage/TransferPage'
 import Notimanage from '../pages/ManagerPage/Notimanage'
-import Tournaments from '../pages/ManagerPage/Tournaments'
-import Dashboard from '../pages/ManagerPage/Dashboard'
+import OfficalPage from '../pages/ManagerPage/OfficalPage'
 import Setttingpage from '../pages/ManagerPage/Setttingpage'
-import Livescore from '../pages/AdminPage/Livescore'
+import SquadPage from '../pages/ManagerPage/SquadPage'
+import Tournaments from '../pages/ManagerPage/Tournaments'
+import TransferPage from '../pages/ManagerPage/TransferPage'
 import Matchlist from '../pages/UserPage/Matchlist'
 // import TeamPage from "../pages/UserPage/teams";
 
@@ -66,7 +64,7 @@ function MainRoutes () {
           {!BanRoutes.includes(pathName) && <Appbar />}
           <React.Suspense fallback={<Loading></Loading>}>
             <Routes>
-              <Route exact path='/' element={<UserPage></UserPage>}></Route>
+              <Route exact path='/' element={<UserPage/>}></Route>
               <Route exact path='/addteam' element={<Createteam />}></Route>
               <Route exact path='/live-score' element={<Livescore />}></Route>
               <Route exact path='/dashboard' element={<Dashboard />}></Route>
