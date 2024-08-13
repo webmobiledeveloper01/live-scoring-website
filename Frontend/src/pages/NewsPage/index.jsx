@@ -1,78 +1,103 @@
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Main } from '../../styled';
 
+const NEWS_SOURCES = [
+  { name: 'Latest News', url: 'news/90mins' },
+  { name: 'OneFootball', url: 'news/onefootball' },
+  { name: 'ESPN', url: 'news/espn' },
+  { name: 'La Liga', url: 'news/fourfourtwo/laliga' },
+  { name: 'EPL', url: 'news/fourfourtwo/epl' },
+  { name: 'Bundesliga', url: 'news/fourfourtwo/bundesliga' },
+  { name: 'UCL', url: 'news/fourfourtwo/ucl' },
+];
+
 function NewsPage() {
-  const [newsList, setNewsList] = useState([]); // Store the news articles
+  const [newsList, setNewsList] = useState({});
+  const [currentSource, setCurrentSource] = useState('Latest News');
   const open = useSelector(state => state.drawer.open);
-  const [opene, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      const options = {
-        method: 'GET',
-        url: 'https://footballnewsapi.netlify.app/.netlify/functions/api/news/fourfourtwo/bundesliga',
-        headers: {
-          'x-rapidapi-key': '7ebd70b9cbmsh0423311ef741bbcp1b1cf5jsnc52abb998c76',
-          'x-rapidapi-host': 'football-news-aggregator-live.p.rapidapi.com'
-        }
-      };
-
-      try {
-        const response = await axios.request(options);
-        setNewsList(response.data); // Set the news articles in state
-      } catch (error) {
-        console.error(error);
+  const fetchNews = useCallback(async (source) => {
+    const options = {
+      method: 'GET',
+      url: `https://cors-anywhere.herokuapp.com/https://footballnewsapi.netlify.app/.netlify/functions/api/${source}`,
+      headers: {
+        'x-rapidapi-key': '7ebd70b9cbmsh0423311ef741bbcp1b1cf5jsnc52abb998c76',
+        'x-rapidapi-host': 'football-news-aggregator-live.p.rapidapi.com'
       }
     };
 
-    fetchNews(); // Fetch news when component mounts
+    try {
+      const response = await axios.request(options);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }, []);
+
+  useEffect(() => {
+    const fetchAllNews = async () => {
+      const today = new Date().toDateString();
+      const storedNews = localStorage.getItem('footballNews');
+      const storedDate = localStorage.getItem('footballNewsDate');
+
+      if (storedNews && storedDate === today) {
+        setNewsList(JSON.parse(storedNews));
+      } else {
+        const newsPromises = NEWS_SOURCES.map(source => 
+          fetchNews(source.url).then(data => ({ [source.name]: data }))
+        );
+        const newsResults = await Promise.all(newsPromises);
+        const combinedNews = Object.assign({}, ...newsResults);
+        
+        setNewsList(combinedNews);
+        localStorage.setItem('footballNews', JSON.stringify(combinedNews));
+        localStorage.setItem('footballNewsDate', today);
+      }
+    };
+
+    fetchAllNews();
+  }, [fetchNews]);
+
+  const handleSourceChange = (event, newSource) => {
+    if (newSource !== null) {
+      setCurrentSource(newSource);
+    }
+  };
+
+  const currentNewsList = useMemo(() => newsList[currentSource] || [], [newsList, currentSource]);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleOpen} 
-          startIcon={<PersonAddAltOutlinedIcon />}
-          sx={{ borderRadius: 2 }}
+      <Box sx={{ mt: 6, mb: 3 }}>
+        <ToggleButtonGroup
+          value={currentSource}
+          exclusive
+          onChange={handleSourceChange}
+          aria-label="news source"
         >
-          Add new news
-        </Button>
+          {NEWS_SOURCES.map((source) => (
+            <ToggleButton key={source.name} value={source.name} aria-label={source.name}>
+              {source.name}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
       </Box>
-
-      <Dialog open={opene} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>Add new news</DialogTitle>
-        <DialogContent>
-          <TextField margin="dense" label="Logo" type="file" fullWidth />
-          <TextField autoFocus margin="dense" label="Title" type="text" fullWidth />
-          <TextField margin="dense" label="Description" type="text" fullWidth multiline rows={4} />
-          <TextField margin="dense" label="Date" type="date" fullWidth InputLabelProps={{ shrink: true }} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} variant="contained" color="primary">Save</Button>
-        </DialogActions>
-      </Dialog>
 
       <Main open={open}>
         <Grid container spacing={3}>
-          {newsList.map((news, index) => (
+          {currentNewsList.map((news, index) => (
             <Grid item xs={12} key={index}>
               <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
+                <a href={news.url} target='_blank'>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={12} sm={4} md={3}>
                     <Box sx={{ position: 'relative', paddingTop: '60%', borderRadius: 2, overflow: 'hidden' }}>
                       <img
-                        src={news.news_img || 'https://via.placeholder.com/150'} // Use placeholder if no image
+                        src={news.news_img || 'https://resize.indiatvnews.com/en/resize/newbucket/1200_-/2020/04/pjimage-2020-04-15t081910-1586918957.jpg'}
                         alt={news.title}
                         style={{
                           position: 'absolute',
@@ -89,13 +114,13 @@ function NewsPage() {
                     <Typography variant='h6' gutterBottom sx={{ fontWeight: 'bold' }}>
                       {news.title}
                     </Typography>
-                    <Box sx={{ mb: 1 }}>
-                      {/* Add tags or any additional information if needed */}
-                    </Box>
-                    <Typography variant='caption' sx={{ display: 'block', mt: 1 }}>{news.short_desc}</Typography>
-                    <Typography variant='caption' sx={{ display: 'block', mt: 1 }}>Source: <a href={news.url} target="_blank" rel="noopener noreferrer">Read more</a></Typography>
+                    <Typography variant='body2' sx={{ mb: 2 }}>{news.short_desc}</Typography>
+                    <Typography variant='body2'>
+                      Source: <a href={news.url} target="_blank" rel="noopener noreferrer">Read more</a>
+                    </Typography>
                   </Grid>
                 </Grid>
+                </a>
               </Paper>
             </Grid>
           ))}
