@@ -1,16 +1,39 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Main } from '../../styled'
-import { Stack, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box, Container, Grid, Paper } from '@mui/material'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Paper, TextField, Typography } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Main } from '../../styled';
 
 function NewsPage() {
-  const newsList = [1, 2, 3]
-  const open = useSelector(state => state.drawer.open)
-  const [opene, setOpen] = useState(false)
+  const [newsList, setNewsList] = useState([]); // Store the news articles
+  const open = useSelector(state => state.drawer.open);
+  const [opene, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const options = {
+        method: 'GET',
+        url: 'https://footballnewsapi.netlify.app/.netlify/functions/api/news/fourfourtwo/bundesliga',
+        headers: {
+          'x-rapidapi-key': '7ebd70b9cbmsh0423311ef741bbcp1b1cf5jsnc52abb998c76',
+          'x-rapidapi-host': 'football-news-aggregator-live.p.rapidapi.com'
+        }
+      };
+
+      try {
+        const response = await axios.request(options);
+        setNewsList(response.data); // Set the news articles in state
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNews(); // Fetch news when component mounts
+  }, []);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -42,15 +65,15 @@ function NewsPage() {
 
       <Main open={open}>
         <Grid container spacing={3}>
-          {newsList.map((_, index) => (
+          {newsList.map((news, index) => (
             <Grid item xs={12} key={index}>
               <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={12} sm={4} md={3}>
                     <Box sx={{ position: 'relative', paddingTop: '60%', borderRadius: 2, overflow: 'hidden' }}>
                       <img
-                        src='https://uk1.sportal365images.com/process/smp-image-api/livescore.com/14052024/22e1e294-c195-4456-857e-613c4b4abc5e.jpg?operations=fit(260:)&w=260&quality=100'
-                        alt=''
+                        src={news.news_img || 'https://via.placeholder.com/150'} // Use placeholder if no image
+                        alt={news.title}
                         style={{
                           position: 'absolute',
                           top: 0,
@@ -64,21 +87,13 @@ function NewsPage() {
                   </Grid>
                   <Grid item xs={12} sm={8} md={9}>
                     <Typography variant='h6' gutterBottom sx={{ fontWeight: 'bold' }}>
-                      Kilmarnock vs Celtic predictions: O'Riley ready to lead Bhoys to title
+                      {news.title}
                     </Typography>
                     <Box sx={{ mb: 1 }}>
-                      {['Scottish Premiership', 'Kilmarnock', 'Celtic'].map((tag, i) => (
-                        <Button 
-                          key={i} 
-                          variant="outlined" 
-                          size="small" 
-                          sx={{ mr: 1, mb: 1, borderRadius: 4, textTransform: 'none' }}
-                        >
-                          {tag}
-                        </Button>
-                      ))}
+                      {/* Add tags or any additional information if needed */}
                     </Box>
-                    <Typography variant='caption' sx={{ display: 'block', mt: 1 }}>5 hours ago</Typography>
+                    <Typography variant='caption' sx={{ display: 'block', mt: 1 }}>{news.short_desc}</Typography>
+                    <Typography variant='caption' sx={{ display: 'block', mt: 1 }}>Source: <a href={news.url} target="_blank" rel="noopener noreferrer">Read more</a></Typography>
                   </Grid>
                 </Grid>
               </Paper>
@@ -87,7 +102,7 @@ function NewsPage() {
         </Grid>
       </Main>
     </Container>
-  )
+  );
 }
 
-export default NewsPage
+export default NewsPage;
