@@ -1,39 +1,63 @@
-import React from 'react'
-import { 
-  Typography, 
-  Divider, 
-  Stack, 
-  Box, 
-  useMediaQuery, 
-  useTheme,
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Paper,
+  Typography,
   Grid,
-  Paper
-} from '@mui/material'
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import axios from "axios";
 
 function Overview() {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const matchItems = [1, 2, 3, 4]
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [fixtures, setFixtures] = useState([]);
+
+  useEffect(() => {
+    const fetchFixtures = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/tournament-matches" // Replace with your API endpoint
+        );
+        console.log(response);
+        setFixtures(response.data);
+      } catch (error) {
+        console.error("Error fetching fixtures:", error);
+      }
+    };
+
+    fetchFixtures();
+  }, []);
 
   return (
     <Box sx={{ p: 2 }}>
       <Paper elevation={3} sx={{ mb: 3, p: 2 }}>
         <Stack
-          direction={isMobile ? 'column' : 'row'}
-          divider={!isMobile && <Divider orientation="vertical" flexItem />}
+          direction={isMobile ? "column" : "row"}
           spacing={2}
-          alignItems={isMobile ? 'center' : 'flex-start'}
+          alignItems={isMobile ? "center" : "flex-start"}
         >
-          <Box sx={{ textAlign: isMobile ? 'center' : 'left', mb: isMobile ? 2 : 0 }}>
+          <Box
+            sx={{
+              textAlign: isMobile ? "center" : "left",
+              mb: isMobile ? 2 : 0,
+            }}
+          >
             <Typography variant="subtitle1" gutterBottom>
               NEXT MATCH
             </Typography>
-            <Stack direction="row" spacing={2} alignItems="center" justifyContent={isMobile ? 'center' : 'flex-start'}>
-              <CalendarTodayOutlinedIcon sx={{ fontSize: 25 }} />
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              justifyContent={isMobile ? "center" : "flex-start"}
+            >
+              <StarBorderOutlinedIcon sx={{ fontSize: 25 }} />
               <Box>
-                <Typography variant={isMobile ? 'h4' : 'h3'} gutterBottom>
+                <Typography variant={isMobile ? "h4" : "h3"} gutterBottom>
                   20:00
                 </Typography>
                 <Typography variant="h6" gutterBottom>
@@ -46,7 +70,7 @@ function Overview() {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ width: '100%', maxWidth: 400 }}
+            sx={{ width: "100%", maxWidth: 400 }}
           >
             <Stack alignItems="center">
               <img
@@ -73,32 +97,46 @@ function Overview() {
         </Stack>
       </Paper>
 
-      {matchItems.map((item, index) => (
-        <Paper key={index} elevation={2} sx={{ mb: 2, p: 2 }}>
+      {fixtures.map((match) => (
+        <Paper key={match.id} elevation={2} sx={{ mb: 2, p: 2 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} sm={4}>
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                justifyContent={isMobile ? "space-between" : "flex-start"}
+              >
                 <StarBorderOutlinedIcon />
-                <Typography variant="body2">AET</Typography>
+                <Typography variant="body2">{match.match_status}</Typography>
                 <Box>
-                  <Typography variant="body2">10/20/2024</Typography>
-                  <Typography variant="body2">09:00</Typography>
+                  <Typography variant="body2">
+                    {new Date(match.match_time).toLocaleDateString()}
+                  </Typography>
+                  <Typography variant="body2">
+                    {new Date(match.match_time).toLocaleTimeString()}
+                  </Typography>
                 </Box>
               </Stack>
             </Grid>
             <Grid item xs={12} sm={8}>
-              <Stack spacing={1}>
-                {[1, 2].map((teamIndex) => (
-                  <Stack key={teamIndex} direction="row" justifyContent="space-between" alignItems="center">
+              <Stack spacing={2}>
+                {[match.teamA, match.teamB].map((team, teamIndex) => (
+                  <Stack
+                    key={teamIndex}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
                     <Stack direction="row" spacing={1} alignItems="center">
                       <img
-                        src="https://lsm-static-prod.livescore.com/medium/enet/8633.png"
-                        alt="Team"
+                        src={team.logo} // Assume your API provides a logo URL
+                        alt={team.name}
                         style={{ width: 20, height: 20 }}
                       />
-                      <Typography variant="body1">Real Madrid</Typography>
+                      <Typography variant="body1">{team.name}</Typography>
                     </Stack>
-                    <Typography variant="body1">1</Typography>
+                    {!isMobile && <Typography variant="body1">-</Typography>}
                   </Stack>
                 ))}
               </Stack>
@@ -107,7 +145,7 @@ function Overview() {
         </Paper>
       ))}
     </Box>
-  )
+  );
 }
 
-export default Overview
+export default Overview;
