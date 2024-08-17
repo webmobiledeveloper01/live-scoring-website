@@ -70,7 +70,7 @@ export default function CustomizedDialogs() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/users/email/${email}`
+        `https://live-scoring-website-vjrd.onrender.com/api/users/email/${email}`
       );
       if (response.ok) {
         const user = await response.json();

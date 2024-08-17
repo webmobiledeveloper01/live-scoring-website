@@ -94,7 +94,9 @@ export function EditToolbar(props) {
 
   const fetchTeams = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/teams");
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/teams"
+      );
       const formattedData = response.data.map((team) => ({
         ...team,
         contact: team.contact_details,
@@ -123,7 +125,7 @@ export function EditToolbar(props) {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/api/teams",
+        "https://live-scoring-website-vjrd.onrender.com/api/teams",
         teamToSave
       );
       setTeams([...teams, response.data]);

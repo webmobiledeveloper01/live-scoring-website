@@ -33,10 +33,10 @@ export default function UserDrawer() {
     const fetchTeamsAndTournaments = async () => {
       try {
         const teamsResponse = await axios.get(
-          "http://localhost:8080/api/teams"
+          "https://live-scoring-website-vjrd.onrender.com/api/teams"
         );
         const tournamentsResponse = await axios.get(
-          "http://localhost:8080/api/tournaments"
+          "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
         );
 
         const teams = teamsResponse.data.map((team) => ({
@@ -69,8 +69,8 @@ export default function UserDrawer() {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-  localStorage.removeItem('menuIndex');
+    localStorage.removeItem("user");
+    localStorage.removeItem("menuIndex");
     dispatch(logout());
     navigate("/");
   };

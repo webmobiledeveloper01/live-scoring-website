@@ -17,7 +17,9 @@ const TournamentManagement = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/tournaments");
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
+      );
       if (!response.ok) throw new Error("Failed to fetch tournaments");
       const data = await response.json();
       console.log("Tournament data", data);

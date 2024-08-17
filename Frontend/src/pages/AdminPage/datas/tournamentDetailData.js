@@ -143,13 +143,16 @@ export function EditToolbar(props) {
 
       console.log("Payload to be sent:", payload);
 
-      const response = await fetch("http://localhost:8080/api/tournaments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournaments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to add tournament");
       const addedTournament = await response.json();
