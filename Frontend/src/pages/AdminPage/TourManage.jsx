@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import CustomEditTable from '../../components/CustomEditTable';
-import { columns, EditToolbar } from '../AdminPage/datas/tournamentDetailData';
-import './adminstyle.css';
-import TourManageDetail from './TourManageDetail';
-import OfficalPage from './TourManageDetail/OfficalPage';
+import React, { useEffect, useState } from "react";
+import CustomEditTable from "../../components/CustomEditTable";
+import { columns, EditToolbar } from "../AdminPage/datas/tournamentDetailData";
+import "./adminstyle.css";
+import TourManageDetail from "./TourManageDetail";
+import OfficalPage from "./TourManageDetail/OfficalPage";
 
 const TournamentManagement = () => {
   const [tournaments, setTournaments] = useState([]);
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
-  const menuLists = ['Tournament', 'Live', 'Players'];
+  const menuLists = ["Tournament", "Live", "Players"];
 
   useEffect(() => {
     fetchTournaments();
@@ -17,23 +17,22 @@ const TournamentManagement = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await fetch('https://live-score-website-mnxj.onrender.com/api/tournaments');
-      if (!response.ok) throw new Error('Failed to fetch tournaments');
+      const response = await fetch("http://localhost:8080/api/tournaments");
+      if (!response.ok) throw new Error("Failed to fetch tournaments");
       const data = await response.json();
-      console.log("Tournament data", data)
+      console.log("Tournament data", data);
       setTournaments(data);
     } catch (error) {
-      console.error('Error fetching tournaments:', error);
+      console.error("Error fetching tournaments:", error);
     }
   };
 
   const handleAddTournament = (newTournament) => {
-    setTournaments(prevTournaments => [...prevTournaments, newTournament]);
+    setTournaments((prevTournaments) => [...prevTournaments, newTournament]);
   };
   const handleDataUpdated = (updatedRows) => {
-  setTournaments(updatedRows);
-};
-
+    setTournaments(updatedRows);
+  };
 
   const handleMenu = (index) => {
     setSelect(index);
@@ -41,11 +40,13 @@ const TournamentManagement = () => {
       case 0:
         setRenderPage(
           <CustomEditTable
-  customToolbar={(props) => <EditToolbar {...props} onAddTournament={handleAddTournament} />}
-  columns={columns}
-  data={tournaments}
-  onDataUpdated={handleDataUpdated}
-/>
+            customToolbar={(props) => (
+              <EditToolbar {...props} onAddTournament={handleAddTournament} />
+            )}
+            columns={columns}
+            data={tournaments}
+            onDataUpdated={handleDataUpdated}
+          />
         );
         break;
       case 1:
@@ -65,12 +66,14 @@ const TournamentManagement = () => {
   }, [select]);
 
   return (
-    <div className='max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4'>
-      <ul className='nav main-nav flex gap-8 bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6'>
+    <div className="max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4">
+      <ul className="nav main-nav flex gap-8 bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6">
         {menuLists.map((item, index) => (
-          <li className='nav-item cursor-pointer p-4 flex-shrink-0' key={index}>
+          <li className="nav-item cursor-pointer p-4 flex-shrink-0" key={index}>
             <a
-              className={`nav-link cursor-pointer ${index === select ? '!active !text-yellow-200' : ''}`}
+              className={`nav-link cursor-pointer ${
+                index === select ? "!active !text-yellow-200" : ""
+              }`}
               onClick={() => handleMenu(index)}
             >
               {item}
@@ -78,7 +81,7 @@ const TournamentManagement = () => {
           </li>
         ))}
       </ul>
-      <div className='mai-body'>{renderPage}</div>
+      <div className="mai-body">{renderPage}</div>
     </div>
   );
 };

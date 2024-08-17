@@ -15,7 +15,7 @@ const Createteam = () => {
 
   useEffect(() => {
     axios
-      .get("https://live-score-website-mnxj.onrender.com/api/teams")
+      .get("http://localhost:8080/api/teams")
       .then((response) => {
         setRows(response.data);
       })

@@ -101,7 +101,7 @@ export default function ManagerTable() {
 
   const fetchManagers = async () => {
     try {
-      const response = await axios.get("https://live-score-website-mnxj.onrender.com/api/managers");
+      const response = await axios.get("http://localhost:8080/api/managers");
       setRows(response.data);
     } catch (error) {
       console.error("Error fetching managers:", error);
@@ -120,7 +120,7 @@ export default function ManagerTable() {
   const handleSave = async () => {
     try {
       const response = await axios.post(
-        "https://live-score-website-mnxj.onrender.com/api/managers",
+        "http://localhost:8080/api/managers",
         newManager
       );
       setRows((prevRows) => [...prevRows, response.data]);
