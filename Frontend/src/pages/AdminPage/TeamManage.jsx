@@ -1,17 +1,23 @@
-import React from 'react'
-import CustomEditTable from '../../components/CustomEditTable'
-import { columns, initialRows, EditToolbar } from './datas/TeamManageData'
+import React from 'react';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
 
-function TeamManage () {
+function CustomEditTable({ customToolbar: CustomToolbar, columns, data }) {
   return (
-    <div className='main-body' style={{ marginTop: 30 }}>
-      <CustomEditTable
-        customToolbar={EditToolbar}
+    <div style={{ height: 600, width: '100%' }}>
+      <DataGrid
+        rows={data}
         columns={columns}
-        data={initialRows}
+        pageSize={10}
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        componentsProps={{
+          toolbar: { setRows: () => {} }, // Adjust as needed
+        }}
       />
     </div>
-  )
+  );
 }
 
-export default TeamManage
+export default CustomEditTable;
