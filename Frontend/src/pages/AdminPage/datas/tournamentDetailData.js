@@ -77,8 +77,13 @@ export const columns = [
     ),
   },
   {
+<<<<<<< Updated upstream
     field: "sponsor_id",
     headerName: "Sponsor ID",
+=======
+    field: 'sponsor_name',
+    headerName: 'Sponsor Name',
+>>>>>>> Stashed changes
     width: 150,
     editable: false,
   },
@@ -88,6 +93,7 @@ export function EditToolbar(props) {
   const { setRows, setRowModesModel, onAddTournament } = props;
   const [searched, setSearched] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [sponsors, setSponsors] = React.useState([]);
   const [newTournament, setNewTournament] = React.useState({
     name: "",
     description: "",
@@ -97,7 +103,19 @@ export function EditToolbar(props) {
     status: 1,
     sponsorId: "",
   });
-
+  const fetchSponsors = async () => {
+    try {
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers');
+      if (!response.ok) throw new Error('Failed to fetch sponsors');
+      const data = await response.json();
+      setSponsors(data);
+    } catch (error) {
+      console.error('Error fetching sponsors:', error);
+    }
+  };
+  React.useEffect(() => {
+    fetchSponsors();
+  }, []);
   const handleRequestSearch = (e) => {
     const searchedVal = e.target.value;
     setSearched(searchedVal);
@@ -125,9 +143,29 @@ export function EditToolbar(props) {
   };
 
   const handleInputChange = (event) => {
+<<<<<<< Updated upstream
     const { name, value } = event.target;
     setNewTournament((prev) => ({ ...prev, [name]: value }));
+=======
+    const { name, value, type } = event.target;
+  
+    if (type === 'radio') {
+      const sponsorId = parseInt(value); // Convert to number
+      setNewTournament((prev) => ({
+        ...prev,
+        [name]: sponsorId, // Assign the selected sponsor ID
+      }));
+    } else {
+      setNewTournament((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+>>>>>>> Stashed changes
   };
+  
+  
+  
 
   const handleSave = async () => {
     try {
@@ -138,6 +176,7 @@ export function EditToolbar(props) {
         start_date: new Date(newTournament.startDate).toISOString(),
         end_date: new Date(newTournament.endDate).toISOString(),
         status: parseInt(newTournament.status),
+<<<<<<< Updated upstream
         sponsor_id: newTournament.sponsorId || null,
       };
 
@@ -155,6 +194,22 @@ export function EditToolbar(props) {
       );
 
       if (!response.ok) throw new Error("Failed to add tournament");
+=======
+        sponsor_id: newTournament.sponsorId // Single sponsor ID
+      };
+  
+      console.log('Payload to be sent:', payload);
+  
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) throw new Error('Failed to add tournament');
+>>>>>>> Stashed changes
       const addedTournament = await response.json();
       onAddTournament(addedTournament);
       handleClose();
@@ -162,6 +217,7 @@ export function EditToolbar(props) {
       console.error("Error adding tournament:", error.message);
     }
   };
+  
 
   return (
     <GridToolbarContainer
@@ -243,6 +299,7 @@ export function EditToolbar(props) {
             value={newTournament.status}
             onChange={handleInputChange}
           />
+<<<<<<< Updated upstream
           <TextField
             margin="dense"
             name="sponsorId"
@@ -252,6 +309,27 @@ export function EditToolbar(props) {
             value={newTournament.sponsorId}
             onChange={handleInputChange}
           />
+=======
+          <div>
+    <p>Sponsor:</p>
+    { 
+  sponsors.map((sponsor) => (
+    <div key={sponsor.id}>
+      <input
+        type="radio"
+        id={`sponsor-${sponsor.id}`}
+        name="sponsorId"
+        value={sponsor.id}
+        checked={newTournament.sponsorId === sponsor.id} // Ensure type match here
+        onChange={handleInputChange}
+      />
+      <label htmlFor={`sponsor-${sponsor.id}`}>{sponsor.name}</label>
+    </div>
+  ))
+}
+
+  </div>
+>>>>>>> Stashed changes
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  InputBase,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    InputBase,
+    TextField,
 } from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
+import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import axios from "axios";
-import { styled, alpha } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 
 // Styled components
 const Search = styled("div")(({ theme }) => ({
@@ -101,9 +101,13 @@ export default function ManagerTable() {
 
   const fetchManagers = async () => {
     try {
+<<<<<<< Updated upstream
       const response = await axios.get(
         "https://live-scoring-website-vjrd.onrender.com/api/managers"
       );
+=======
+      const response = await axios.get("https://live-scoring-website-vjrd.onrender.com/api/managers");
+>>>>>>> Stashed changes
       setRows(response.data);
     } catch (error) {
       console.error("Error fetching managers:", error);

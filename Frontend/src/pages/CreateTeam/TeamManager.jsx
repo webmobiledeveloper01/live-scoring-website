@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import CustomEditTable from "../../components/CustomEditTable";
-import {
-  contentMenu,
-  columns,
-  EditToolbar,
-} from "../AdminPage/datas/CreateTeamdata";
-import { Main } from "../../styled";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import CustomEditTable from "../../components/CustomEditTable";
+import { Main } from "../../styled";
+import {
+    columns,
+    EditToolbar
+} from "../AdminPage/datas/CreateTeamdata";
 
 const Createteam = () => {
   const open = useSelector((state) => state.drawer.open);

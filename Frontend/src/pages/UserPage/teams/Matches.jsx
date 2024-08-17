@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Grid,
-  Stack,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import CustomTabs from "../../../components/CustomTabs";
+import {
+    Box,
+    Grid,
+    Paper,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from "@mui/material";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import CustomTabs from "../../../components/CustomTabs";
 
 function Matches() {
   const theme = useTheme();

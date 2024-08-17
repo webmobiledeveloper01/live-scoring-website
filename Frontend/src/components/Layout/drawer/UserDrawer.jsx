@@ -32,12 +32,17 @@ export default function UserDrawer() {
   useEffect(() => {
     const fetchTeamsAndTournaments = async () => {
       try {
+<<<<<<< Updated upstream
         const teamsResponse = await axios.get(
           "https://live-scoring-website-vjrd.onrender.com/api/teams"
         );
         const tournamentsResponse = await axios.get(
           "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
         );
+=======
+        const teamsResponse = await axios.get('https://live-scoring-website-vjrd.onrender.com/api/teams')
+        const tournamentsResponse = await axios.get('https://live-scoring-website-vjrd.onrender.com/api/tournaments')
+>>>>>>> Stashed changes
 
         const teams = teamsResponse.data.map((team) => ({
           type: "team",

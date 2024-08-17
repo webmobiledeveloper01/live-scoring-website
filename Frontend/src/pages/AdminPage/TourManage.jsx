@@ -7,16 +7,23 @@ import OfficalPage from "./TourManageDetail/OfficalPage";
 
 const TournamentManagement = () => {
   const [tournaments, setTournaments] = useState([]);
+  const [sponsors, setSponsors] = useState([]); // State for sponsors
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
+<<<<<<< Updated upstream
   const menuLists = ["Tournament", "Live", "Players"];
+=======
+  const menuLists = ['', 'Tournament', 'Live', 'Players'];
+>>>>>>> Stashed changes
 
   useEffect(() => {
     fetchTournaments();
+    fetchSponsors(); // Fetch sponsors when the component mounts
   }, []);
 
   const fetchTournaments = async () => {
     try {
+<<<<<<< Updated upstream
       const response = await fetch(
         "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
       );
@@ -24,14 +31,57 @@ const TournamentManagement = () => {
       const data = await response.json();
       console.log("Tournament data", data);
       setTournaments(data);
+=======
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments');
+      if (!response.ok) throw new Error('Failed to fetch tournaments');
+      const data = await response.json();
+      // Call fetchSponsors after tournaments are fetched
+      fetchSponsors(data);
+>>>>>>> Stashed changes
     } catch (error) {
       console.error("Error fetching tournaments:", error);
     }
   };
 
+<<<<<<< Updated upstream
   const handleAddTournament = (newTournament) => {
     setTournaments((prevTournaments) => [...prevTournaments, newTournament]);
   };
+=======
+  const fetchSponsors = async (tournamentData) => {
+    try {
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers');
+      if (!response.ok) throw new Error('Failed to fetch sponsors');
+      const sponsorsData = await response.json();
+      setSponsors(sponsorsData);
+      // Once both tournaments and sponsors are fetched, map sponsor names to tournaments
+      mapSponsorNames(tournamentData, sponsorsData);
+    } catch (error) {
+      console.error('Error fetching sponsors:', error);
+    }
+  };
+
+  const mapSponsorNames = (tournaments, sponsors) => {
+    const enrichedTournaments = tournaments.map((tournament) => {
+      const sponsor = sponsors.find((sponsor) => sponsor.id === tournament.sponsor_id);
+      return {
+        ...tournament,
+        sponsor_name: sponsor ? sponsor.name : 'Unknown Sponsor', // Add sponsor name field
+      };
+    });
+    setTournaments(enrichedTournaments); // Update tournaments with sponsor names
+  };
+
+  const handleAddTournament = (newTournament) => {
+    const sponsor = sponsors.find((s) => s.id === newTournament.sponsor_id);
+    const enrichedTournament = {
+      ...newTournament,
+      sponsor_name: sponsor ? sponsor.name : 'Unknown Sponsor',
+    };
+    setTournaments(prevTournaments => [...prevTournaments, enrichedTournament]);
+  };
+
+>>>>>>> Stashed changes
   const handleDataUpdated = (updatedRows) => {
     setTournaments(updatedRows);
   };
@@ -39,22 +89,28 @@ const TournamentManagement = () => {
   const handleMenu = (index) => {
     setSelect(index);
     switch (index) {
-      case 0:
+      case 1:
         setRenderPage(
           <CustomEditTable
+<<<<<<< Updated upstream
             customToolbar={(props) => (
               <EditToolbar {...props} onAddTournament={handleAddTournament} />
             )}
             columns={columns}
             data={tournaments}
+=======
+            customToolbar={(props) => <EditToolbar {...props} onAddTournament={handleAddTournament} />}
+            columns={columns}
+            data={tournaments} // Pass enriched tournaments with sponsor names
+>>>>>>> Stashed changes
             onDataUpdated={handleDataUpdated}
           />
         );
         break;
-      case 1:
+      case 2:
         setRenderPage(<TourManageDetail />);
         break;
-      case 2:
+      case 3:
         setRenderPage(<OfficalPage />);
         break;
       default:
