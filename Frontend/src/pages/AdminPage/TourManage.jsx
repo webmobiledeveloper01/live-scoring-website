@@ -1,79 +1,86 @@
-import React, { useState } from 'react'
-import './adminstyle.css'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import IconButton from '@mui/material/IconButton'
-import CustomTab from '../../components/CustomTabs'
-import CustomEditTable from '../../components/CustomEditTable'
-import {
-  contentMenu,
-  columns,
-  EditToolbar,
-  initialRows
-} from '../AdminPage/datas/tournamentDetailData'
-import TourManageDetail from './TourManageDetail'
-import OfficalPage from './TourManageDetail/OfficalPage'
+import React, { useEffect, useState } from 'react';
+import CustomEditTable from '../../components/CustomEditTable';
+import { columns, EditToolbar } from '../AdminPage/datas/tournamentDetailData';
+import './adminstyle.css';
+import TourManageDetail from './TourManageDetail';
+import OfficalPage from './TourManageDetail/OfficalPage';
 
 const TournamentManagement = () => {
-  const [RenderPage, setRenderPage] = React.useState(
-    <CustomEditTable
-      customToolbar={EditToolbar}
-      columns={columns}
-      data={initialRows}
-    />
-  )
+  const [tournaments, setTournaments] = useState([]);
+  const [renderPage, setRenderPage] = useState(null);
+  const [select, setSelect] = useState(0);
+  const menuLists = ['Tournament', 'Live', 'Players'];
 
-  const [select, setSelect] = React.useState(0)
+  useEffect(() => {
+    fetchTournaments();
+  }, []);
 
-  const menuLists = ['Tournament', 'Live', 'Players']
+  const fetchTournaments = async () => {
+    try {
+      const response = await fetch('https://live-score-website-mnxj.onrender.com/api/tournaments');
+      if (!response.ok) throw new Error('Failed to fetch tournaments');
+      const data = await response.json();
+      console.log("Tournament data", data)
+      setTournaments(data);
+    } catch (error) {
+      console.error('Error fetching tournaments:', error);
+    }
+  };
 
-  const handleMenu = (index, text) => {
-    setSelect(index)
-    console.log(index)
+  const handleAddTournament = (newTournament) => {
+    setTournaments(prevTournaments => [...prevTournaments, newTournament]);
+  };
+  const handleDataUpdated = (updatedRows) => {
+  setTournaments(updatedRows);
+};
+
+
+  const handleMenu = (index) => {
+    setSelect(index);
     switch (index) {
       case 0:
         setRenderPage(
           <CustomEditTable
-            customToolbar={EditToolbar}
-            columns={columns}
-            data={initialRows}
-          />
-        )
-        break
+  customToolbar={(props) => <EditToolbar {...props} onAddTournament={handleAddTournament} />}
+  columns={columns}
+  data={tournaments}
+  onDataUpdated={handleDataUpdated}
+/>
+        );
+        break;
       case 1:
-        setRenderPage(<TourManageDetail />)
-        break
+        setRenderPage(<TourManageDetail />);
+        break;
       case 2:
-        setRenderPage(<OfficalPage />)
-        break
-
+        setRenderPage(<OfficalPage />);
+        break;
       default:
-        break
+        setRenderPage(null);
+        break;
     }
-  }
-  return (
-    <>
-      <div className='max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4'>
-        <ul className='nav main-nav  flex gap-8  bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6'>
-          {menuLists.map((item, index) => (
-            <li className='nav-item  cursor-pointer p-4 flex-shrink-0' key={index}>
-              <a
-                className={
-                  ('nav-link cursor-pointer',
-                  index == select && '!active !text-yellow-200')
-                }
-                onClick={() => handleMenu(index, item)}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-        {/* <CustomTab borderShow={true} tabData={contentMenu} /> */}
-        <div className='mai-body'>{RenderPage}</div>
-      </div>
-    </>
-  )
-}
+  };
 
-export default TournamentManagement
+  useEffect(() => {
+    handleMenu(select);
+  }, [select]);
+
+  return (
+    <div className='max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4'>
+      <ul className='nav main-nav flex gap-8 bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6'>
+        {menuLists.map((item, index) => (
+          <li className='nav-item cursor-pointer p-4 flex-shrink-0' key={index}>
+            <a
+              className={`nav-link cursor-pointer ${index === select ? '!active !text-yellow-200' : ''}`}
+              onClick={() => handleMenu(index)}
+            >
+              {item}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className='mai-body'>{renderPage}</div>
+    </div>
+  );
+};
+
+export default TournamentManagement;

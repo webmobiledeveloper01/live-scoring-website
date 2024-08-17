@@ -1,171 +1,150 @@
-import React, { useState } from 'react'
-import clsx from 'clsx'
-import { randomId, randomArrayItem } from '@mui/x-data-grid-generator'
-import { useDispatch } from 'react-redux'
-// import { GridToolbarContainer } from '@mui/x-data-grid'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField
-} from '@mui/material'
-import Avatar from '@mui/material/Avatar'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
-import SearchIcon from '@mui/icons-material/Search'
-import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled'
-import { requestPlayer } from '../../../redux/actions'
-// import { randomTraderName, randomId } from '@mui/x-data-grid-generator'
-import { GridToolbarContainer } from '@mui/x-data-grid'
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import { GridToolbarContainer } from '@mui/x-data-grid';
+import React from 'react';
+import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled';
 
-const roles = ['Active', 'Request Approval']
-const randomRole = () => {
-  return randomArrayItem(roles)
-}
-export const initialRows = [
-  {
-    id: 1,
-    name: 'Champions Cup',
-    teams: 'Team Alpha, Team Beta',
-    status: 'Active',
-    startDate: '2024-07-01',
-    endDate: '2024-07-15',
-    logo: 'https://via.placeholder.com/50',
-    sponsor: 'Sponsor A'
-  },
-  {
-    id: 2,
-    name: 'Summer Slam',
-    teams: 'Team Gamma, Team Delta',
-    status: 'Active',
-    startDate: '2024-08-01',
-    endDate: '2024-08-15',
-    logo: 'https://via.placeholder.com/50',
-    sponsor: 'Sponsor B'
-  },
-  {
-    id: 3,
-    name: 'Winter Classic',
-    teams: 'Team Epsilon, Team Zeta',
-    status: 'Scheduled',
-    startDate: '2024-09-01',
-    endDate: '2024-09-15',
-    logo: 'https://via.placeholder.com/50',
-    sponsor: 'Sponsor C'
-  }
-]
 export const columns = [
   {
     field: 'id',
     headerName: 'No',
-    type: 'text',
     width: 50,
     align: 'left',
     headerAlign: 'left',
-    editable: true
+    editable: false
   },
   {
-    field: 'team',
+    field: 'logo',
+    headerName: 'Logo',
+    width: 80,
+    renderCell: (params) => (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        <Avatar src={params.value} sx={{ width: 30, height: 30 }} />
+      </div>
+    )
+  },
+  {
+    field: 'name',
     headerName: 'Tournament',
     width: 220,
-    editable: false,
-    renderCell: params => {
-      return (
-        <div className='d-flex'>
-          <Avatar
-            src={params.row.logo}
-            sx={{ margin: '10px 10px', width: '30px', height: '30px' }}
-          />
-          <span>{params.row.name}</span>
-        </div>
-      )
-    }
+    editable: false
   },
   {
-    field: 'teams',
-    headerName: 'teams',
-    type: 'text',
-    width: 180,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true
+    field: 'description',
+    headerName: 'Description',
+    width: 300,
+    editable: false
+  },
+  {
+    field: 'start_date',
+    headerName: 'Start Date',
+    width: 150,
+    editable: false,
+    renderCell: (params) => new Date(params.value).toLocaleDateString()
+  },
+  {
+    field: 'end_date',
+    headerName: 'End Date',
+    width: 150,
+    editable: false,
+    renderCell: (params) => new Date(params.value).toLocaleDateString()
   },
   {
     field: 'status',
     headerName: 'Status',
     width: 150,
-    editable: true,
-    type: 'singleSelect',
-    valueOptions: ['Active', 'Request Approval'],
-    renderCell: params => {
-      return (
-        <span
-          className={
-            params.row.status == 'Active' ? 'text-green' : 'text-warning'
-          }
-        >
-          {params.row.status}
-        </span>
-      )
-    }
-  },
-  {
-    field: 'startDate',
-    headerName: 'StartDate',
-    type: 'text',
-    width: 100,
-    editable: true
-  },
-  {
-    field: 'endDate',
-    headerName: 'EndDate',
-    type: 'text',
-    width: 100,
-    editable: true
-  },
-  {
-    field: 'sponsor',
-    headerName: 'Sponsor',
-    type: 'text',
-    width: 100,
-    editable: true
-  }
-]
-
-export function EditToolbar (props) {
-  const { setRows, setRowModesModel } = props
-  const [searched, setSearched] = React.useState('')
-  const dispatch = useDispatch()
-  const handleRequstPlayer = () => {
-    dispatch(requestPlayer())
-  }
-
-  const requestSearch = e => {
-    const searchedVal = e.target.value
-    const filteredRows = initialRows.filter(row => {
-      setSearched(searchedVal)
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase())
-    })
-    setRows(oldRows => [...filteredRows])
-  }
-  const [open, setOpen] = useState(false)
-
-  const handleSave = () => {
-    setRows(prevRows =>
-      prevRows.map(row => (row.id === currentRow.id ? currentRow : row))
+    editable: false,
+    renderCell: (params) => (
+      <span className={params.value === 1 ? 'text-green' : 'text-warning'}>
+        {params.value === 1 ? 'Active' : 'Request Approval'}
+      </span>
     )
-    handleClose()
+  },
+  {
+    field: 'sponsor_id',
+    headerName: 'Sponsor ID',
+    width: 150,
+    editable: false
   }
-  const handleOpen = row => {
-    // setCurrentRow(row)
-    setOpen(true)
-  }
+];
+
+export function EditToolbar(props) {
+  const { setRows, setRowModesModel, onAddTournament } = props;
+  const [searched, setSearched] = React.useState('');
+  const [open, setOpen] = React.useState(false);
+  const [newTournament, setNewTournament] = React.useState({
+    name: '',
+    description: '',
+    logo: '',
+    startDate: '',
+    endDate: '',
+    status: 1,
+    sponsorId: ''
+  });
+
+  const handleRequestSearch = (e) => {
+    const searchedVal = e.target.value;
+    setSearched(searchedVal);
+    const filteredRows = props.rows.filter(row =>
+      row.name.toLowerCase().includes(searchedVal.toLowerCase())
+    );
+    setRows(filteredRows);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-    // setCurrentRow({ id: '', name: '', pos: '', avatar: '' })
-  }
+    setOpen(false);
+    setNewTournament({
+      name: '',
+      description: '',
+      logo: '',
+      startDate: '',
+      endDate: '',
+      status: 1,
+      sponsorId: ''
+    });
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewTournament(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const payload = {
+        name: newTournament.name,
+        description: newTournament.description || '',
+        logo: newTournament.logo,
+        start_date: new Date(newTournament.startDate).toISOString(),
+        end_date: new Date(newTournament.endDate).toISOString(),
+        status: parseInt(newTournament.status),
+        sponsor_id: newTournament.sponsorId || null
+      };
+
+      console.log('Payload to be sent:', payload);
+
+      const response = await fetch('https://live-score-website-mnxj.onrender.com/api/tournaments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error('Failed to add tournament');
+      const addedTournament = await response.json();
+      onAddTournament(addedTournament);
+      handleClose();
+    } catch (error) {
+      console.error('Error adding tournament:', error.message);
+    }
+  };
 
   return (
     <GridToolbarContainer
@@ -179,86 +158,89 @@ export function EditToolbar (props) {
           placeholder='Search…'
           inputProps={{ 'aria-label': 'search' }}
           value={searched}
-          onChange={requestSearch}
+          onChange={handleRequestSearch}
         />
       </Search>
-      <button className='pull-btn' color='primary' onClick={handleOpen}>
+      <Button variant='contained' color='primary' onClick={handleOpen}>
         <PersonAddAltOutlinedIcon />
-        &nbsp;&nbsp;add new tournament
-      </button>
+        &nbsp;&nbsp;Add New Tournament
+      </Button>
 
       <Dialog open={open} onClose={handleClose}>
-        <div className='bg-[#061727]'>
-          <DialogTitle>add new tournament</DialogTitle>
-          <DialogContent className='bg-[#061727]'>
-            <TextField
-              autoFocus
-              margin='dense'
-              label='Tournament Name'
-              type='text'
-              fullWidth
-              // value={initialRows.name}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, name: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='teams'
-              type='text'
-              fullWidth
-              // value={initialRows.pos}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, pos: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='status'
-              type='text'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='start date'
-              type='date'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='End date'
-              type='date'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='Sponsor'
-              type='text'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Save</Button>
-          </DialogActions>
-        </div>
+        <DialogTitle>Add New Tournament</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin='dense'
+            name='name'
+            label='Tournament Name'
+            type='text'
+            fullWidth
+            value={newTournament.name}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='description'
+            label='Description'
+            type='text'
+            fullWidth
+            value={newTournament.description}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='logo'
+            label='Logo URL'
+            type='text'
+            fullWidth
+            value={newTournament.logo}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='startDate'
+            label='Start Date'
+            type='date'
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={newTournament.startDate}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='endDate'
+            label='End Date'
+            type='date'
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={newTournament.endDate}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='status'
+            label='Status'
+            type='number'
+            fullWidth
+            value={newTournament.status}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin='dense'
+            name='sponsorId'
+            label='Sponsor ID'
+            type='number'
+            fullWidth
+            value={newTournament.sponsorId}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
       </Dialog>
     </GridToolbarContainer>
-  )
+  );
 }
