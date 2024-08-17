@@ -1,12 +1,12 @@
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { GridToolbarContainer } from "@mui/x-data-grid";

@@ -10,11 +10,7 @@ const TournamentManagement = () => {
   const [sponsors, setSponsors] = useState([]); // State for sponsors
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
-<<<<<<< Updated upstream
-  const menuLists = ["Tournament", "Live", "Players"];
-=======
   const menuLists = ['', 'Tournament', 'Live', 'Players'];
->>>>>>> Stashed changes
 
   useEffect(() => {
     fetchTournaments();
@@ -23,31 +19,16 @@ const TournamentManagement = () => {
 
   const fetchTournaments = async () => {
     try {
-<<<<<<< Updated upstream
-      const response = await fetch(
-        "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
-      );
-      if (!response.ok) throw new Error("Failed to fetch tournaments");
-      const data = await response.json();
-      console.log("Tournament data", data);
-      setTournaments(data);
-=======
       const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments');
       if (!response.ok) throw new Error('Failed to fetch tournaments');
       const data = await response.json();
       // Call fetchSponsors after tournaments are fetched
       fetchSponsors(data);
->>>>>>> Stashed changes
     } catch (error) {
       console.error("Error fetching tournaments:", error);
     }
   };
 
-<<<<<<< Updated upstream
-  const handleAddTournament = (newTournament) => {
-    setTournaments((prevTournaments) => [...prevTournaments, newTournament]);
-  };
-=======
   const fetchSponsors = async (tournamentData) => {
     try {
       const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers');
@@ -81,7 +62,6 @@ const TournamentManagement = () => {
     setTournaments(prevTournaments => [...prevTournaments, enrichedTournament]);
   };
 
->>>>>>> Stashed changes
   const handleDataUpdated = (updatedRows) => {
     setTournaments(updatedRows);
   };
@@ -92,17 +72,9 @@ const TournamentManagement = () => {
       case 1:
         setRenderPage(
           <CustomEditTable
-<<<<<<< Updated upstream
-            customToolbar={(props) => (
-              <EditToolbar {...props} onAddTournament={handleAddTournament} />
-            )}
-            columns={columns}
-            data={tournaments}
-=======
             customToolbar={(props) => <EditToolbar {...props} onAddTournament={handleAddTournament} />}
             columns={columns}
             data={tournaments} // Pass enriched tournaments with sponsor names
->>>>>>> Stashed changes
             onDataUpdated={handleDataUpdated}
           />
         );

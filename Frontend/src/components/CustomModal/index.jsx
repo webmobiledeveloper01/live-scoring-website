@@ -69,13 +69,7 @@ export default function CustomizedDialogs() {
     }
 
     try {
-<<<<<<< Updated upstream
-      const response = await fetch(
-        `https://live-scoring-website-vjrd.onrender.com/api/users/email/${email}`
-      );
-=======
       const response = await fetch(`https://live-scoring-website-vjrd.onrender.com/api/users/email/${email}`);
->>>>>>> Stashed changes
       if (response.ok) {
         const user = await response.json();
 
