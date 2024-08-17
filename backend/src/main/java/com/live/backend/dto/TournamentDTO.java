@@ -12,8 +12,8 @@ public class TournamentDTO {
     private String name;
     private String description;
     private String logo;
-    private Date start_date;
-    private Date end_date;
+    private Date start_date; // Consistent with the model
+    private Date end_date;   // Consistent with the model
     private Long sponsor_id;
     private int status;
 }
