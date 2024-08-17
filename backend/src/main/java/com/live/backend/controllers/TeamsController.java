@@ -1,16 +1,15 @@
 package com.live.backend.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.live.backend.dto.TeamDTO;
+import com.live.backend.models.Teams;
+import com.live.backend.services.TeamsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.live.backend.models.Teams;
-import com.live.backend.services.TeamsService;
-
+import java.util.List;
+import java.util.stream.Collectors;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/teams")
@@ -20,42 +19,59 @@ public class TeamsController {
     private TeamsService teamsService;
 
     @GetMapping
-    public ResponseEntity<List<Teams>> getAllTeams() {
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
         List<Teams> teams = teamsService.findAll();
-        return new ResponseEntity<>(teams, HttpStatus.OK);
+        List<TeamDTO> teamDTOs = teams.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(teamDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Teams> getTeamById(@PathVariable Long id) {
-        Optional<Teams> team = teamsService.findById(id);
-        return team.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                   .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable Long id) {
+        Teams team = teamsService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+        return new ResponseEntity<>(convertToDTO(team), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Teams> createTeam(@RequestBody Teams team) {
+    public ResponseEntity<TeamDTO> createTeam(@RequestBody TeamDTO teamDTO) {
+        Teams team = convertToEntity(teamDTO);
         Teams savedTeam = teamsService.save(team);
-        return new ResponseEntity<>(savedTeam, HttpStatus.CREATED);
+        return new ResponseEntity<>(convertToDTO(savedTeam), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Teams> updateTeam(@PathVariable Long id, @RequestBody Teams team) {
-        if (teamsService.findById(id).isPresent()) {
-            team.setId(id);  // Ensure the correct ID is set for update
-            Teams updatedTeam = teamsService.save(team);
-            return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<TeamDTO> updateTeam(@PathVariable Long id, @RequestBody TeamDTO teamDTO) {
+        Teams team = convertToEntity(teamDTO);
+        team.setId(id);
+        Teams updatedTeam = teamsService.update(team);
+        return new ResponseEntity<>(convertToDTO(updatedTeam), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
-        if (teamsService.findById(id).isPresent()) {
-            teamsService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        teamsService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private TeamDTO convertToDTO(Teams team) {
+        TeamDTO dto = new TeamDTO();
+        dto.setId(team.getId());
+        dto.setName(team.getName());
+        dto.setLogo(team.getLogo());
+        dto.setDescription(team.getDescription());
+        dto.setContact_details(team.getContact_details());  // Ensure consistency
+        dto.setStatus(team.getStatus());
+        return dto;
+    }
+
+    private Teams convertToEntity(TeamDTO dto) {
+        Teams team = new Teams();
+        team.setId(dto.getId());
+        team.setName(dto.getName());
+        team.setLogo(dto.getLogo());
+        team.setDescription(dto.getDescription());
+        team.setContact_details(dto.getContact_details());  // Ensure consistency
+        team.setStatus(dto.getStatus());
+        return team;
     }
 }
