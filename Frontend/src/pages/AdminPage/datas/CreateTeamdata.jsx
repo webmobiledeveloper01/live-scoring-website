@@ -1,250 +1,223 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import Avatar from '@mui/material/Avatar'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
-import SearchIcon from '@mui/icons-material/Search'
-import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled'
-import { requestPlayer } from '../../../redux/actions'
-import { randomTraderName, randomId } from '@mui/x-data-grid-generator'
-import { GridToolbarContainer } from '@mui/x-data-grid'
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import Avatar from "@mui/material/Avatar";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import { Search, SearchIconWrapper, StyledInputBase } from "../../../styled";
+import { GridToolbarContainer } from "@mui/x-data-grid";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
-} from '@mui/material'
-
-export const initialRows = [
-  {
-    id: 1,
-    name: 'Team Alpha',
-    logo: 'https://via.placeholder.com/50',
-    contact: 'alpha@example.com',
-    manager: 'John Doe',
-    players: ['Player 1', 'Player 2'],
-    avatar: '/images/avatar/player.jpg'
-  },
-  {
-    id: 2,
-    name: 'Team Beta',
-    logo: 'https://via.placeholder.com/50',
-    contact: 'beta@example.com',
-    manager: 'Jane Smith',
-    players: ['Player 3', 'Player 4'],
-    avatar: '/images/avatar/player.jpg'
-  },
-  {
-    id: 3,
-    name: 'Team Gamma',
-    logo: 'https://via.placeholder.com/50',
-    contact: 'gamma@example.com',
-    manager: 'Mike Johnson',
-    players: ['Player 5', 'Player 6'],
-    avatar: '/images/avatar/player.jpg'
-  }
-]
+  TextField,
+} from "@mui/material";
+import axios from "axios";
 
 export const columns = [
   {
-    field: 'id',
-    headerName: 'No.',
+    field: "id",
+    headerName: "No.",
     width: 50,
-    align: 'left',
-    headerAlign: 'left',
-    type: 'singleSelect'
+    align: "left",
+    headerAlign: "left",
+    type: "singleSelect",
   },
   {
-    field: 'logo',
-    headerName: 'Logo.',
+    field: "logo",
+    headerName: "Logo",
     width: 100,
-    align: 'left',
-    headerAlign: 'left',
-    type: 'singleSelect',
-    renderCell: params => {
-      return (
-        <div className='d-flex'>
-          <Avatar src={params.row.logo} sx={{ margin: '5px 20px 5px 0' }} />
-        </div>
-      )
-    }
+    align: "left",
+    headerAlign: "left",
+    type: "singleSelect",
+    renderCell: (params) => (
+      <div className="d-flex">
+        <Avatar src={params.row.logo} sx={{ margin: "5px 20px 5px 0" }} />
+      </div>
+    ),
   },
   {
-    field: 'name',
-    headerName: 'Name',
+    field: "name",
+    headerName: "Name",
     width: 150,
     editable: false,
-    renderCell: params => {
-      return (
-        <div className='d-flex'>
-          {/* <Avatar src={params.row.avatar} sx={{ margin: '5px 20px 5px 0' }} /> */}
-          <span>{params.row.name}</span>
-        </div>
-      )
-    }
+    renderCell: (params) => (
+      <div className="d-flex">
+        <span>{params.row.name}</span>
+      </div>
+    ),
   },
   {
-    field: 'contact',
-    headerName: 'Contact',
+    field: "contact",
+    headerName: "Contact",
     width: 150,
-    align: 'left',
-    headerAlign: 'left',
-    type: 'singleSelect',
-    valueOptions: ['Goal Keeper', 'Defender', 'Midfielder'],
+    align: "left",
+    headerAlign: "left",
+    type: "singleSelect",
     editable: true,
-    valueFormatter: (value, row, func) => {
-      return func.valueOptions[value]
+  },
+  {
+    field: "description",
+    headerName: "Description",
+    width: 250,
+    editable: true,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 100,
+    editable: true,
+    renderCell: (params) => (
+      <span>{params.row.status ? "Active" : "Inactive"}</span>
+    ),
+  },
+];
+
+export function EditToolbar(props) {
+  const { setRows, setRowModesModel } = props;
+  const [teams, setTeams] = useState([]);
+  const [searched, setSearched] = useState("");
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [newTeam, setNewTeam] = useState({
+    name: "",
+    logo: "",
+    contact: "",
+    description: "",
+    status: 1,
+  });
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
+  const fetchTeams = async () => {
+    try {
+      const response = await axios.get(
+        "https://live-score-website-mnxj.onrender.com/api/teams"
+      );
+      const formattedData = response.data.map((team) => ({
+        ...team,
+        contact: team.contact_details,
+      }));
+      setTeams(formattedData);
+      setRows(formattedData);
+    } catch (error) {
+      console.error("Error fetching teams:", error);
     }
-  },
-  {
-    field: 'manager',
-    headerName: 'Manager',
-    width: 120,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true,
-    type: 'text'
-    // renderCell: params => {
-    //   return params.value + '%'
-    // }
-  },
-  {
-    field: 'players',
-    headerName: 'Players',
-    width: 120,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true,
-    type: 'text'
-    // renderCell: params => {
-    //   return params.value + '%'
-    // }
-  }
-]
+  };
 
-export const contentMenu = [
-  { text: 'All Squad' },
-  { text: 'Tournament A' },
-  { text: 'Tournament B' }
-]
+  const requestSearch = (e) => {
+    const searchedVal = e.target.value.toLowerCase();
+    setSearched(searchedVal);
+    const filteredRows = teams.filter((row) =>
+      row.name.toLowerCase().includes(searchedVal)
+    );
+    setRows(filteredRows);
+  };
 
-export function EditToolbar (props) {
-  const { setRows, setRowModesModel } = props
-  const [searched, setSearched] = React.useState('')
-  const dispatch = useDispatch()
-  const handleRequstPlayer = () => {
-    dispatch(requestPlayer())
-  }
+  const handleSave = async () => {
+    try {
+      const teamToSave = {
+        ...newTeam,
+        contact_details: newTeam.contact,
+      };
 
-  const requestSearch = e => {
-    const searchedVal = e.target.value
-    const filteredRows = initialRows.filter(row => {
-      setSearched(searchedVal)
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase())
-    })
-    setRows(oldRows => [...filteredRows])
-  }
-  const [open, setOpen] = useState(false)
+      const response = await axios.post(
+        "https://live-score-website-mnxj.onrender.com/api/teams",
+        teamToSave
+      );
+      setTeams([...teams, response.data]);
+      setRows([...teams, response.data]);
+      handleClose();
+    } catch (error) {
+      console.error("Error saving team:", error);
+    }
+  };
 
-  const handleSave = () => {
-    setRows(prevRows =>
-      prevRows.map(row => (row.id === currentRow.id ? currentRow : row))
-    )
-    handleClose()
-  }
-  const handleOpen = row => {
-    // setCurrentRow(row)
-    setOpen(true)
-  }
+  const handleOpen = () => setOpen(true);
 
-  const handleClose = () => {
-    setOpen(false)
-    // setCurrentRow({ id: '', name: '', pos: '', avatar: '' })
-  }
+  const handleClose = () => setOpen(false);
 
   return (
     <GridToolbarContainer
-      sx={{ display: 'flex', justifyContent: 'space-between', margin: '8px 0' }}
+      sx={{ display: "flex", justifyContent: "space-between", margin: "8px 0" }}
     >
       <Search sx={{ borderRadius: 25 }}>
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder='Search…'
-          inputProps={{ 'aria-label': 'search' }}
+          placeholder="Search…"
+          inputProps={{ "aria-label": "search" }}
           value={searched}
           onChange={requestSearch}
         />
       </Search>
-      <button className='pull-btn' color='primary' onClick={handleOpen}>
+      <Button color="primary" onClick={handleOpen}>
         <PersonAddAltOutlinedIcon />
-        &nbsp;&nbsp;add new player
-      </button>
+        &nbsp;&nbsp;Add New Team
+      </Button>
 
       <Dialog open={open} onClose={handleClose}>
-        <div className='bg-[#061727]'>
-          <DialogTitle>Add new Team</DialogTitle>
-          <DialogContent className='bg-[#061727]'>
+        <div className="bg-[#061727]">
+          <DialogTitle>Add New Team</DialogTitle>
+          <DialogContent className="bg-[#061727]">
             <TextField
               autoFocus
-              margin='dense'
-              label='Name'
-              type='text'
+              margin="dense"
+              label="Name"
+              type="text"
               fullWidth
-              // value={initialRows.name}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, name: e.target.value })
-              // }
+              value={newTeam.name}
+              onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
             />
             <TextField
-              margin='dense'
-              label='Logo'
-              type='file'
+              margin="dense"
+              label="Logo"
+              type="text"
               fullWidth
-              // value={initialRows.pos}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, pos: e.target.value })
-              // }
+              value={newTeam.logo}
+              onChange={(e) => setNewTeam({ ...newTeam, logo: e.target.value })}
             />
             <TextField
-              margin='dense'
-              label='contact'
-              type='email'
+              margin="dense"
+              label="Contact"
+              type="text"
               fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
+              value={newTeam.contact}
+              onChange={(e) =>
+                setNewTeam({ ...newTeam, contact: e.target.value })
+              }
             />
             <TextField
-              margin='dense'
-              label='team manager'
-              type='text'
+              margin="dense"
+              label="Description"
+              type="text"
               fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
+              value={newTeam.description}
+              onChange={(e) =>
+                setNewTeam({ ...newTeam, description: e.target.value })
+              }
             />
             <TextField
-              margin='dense'
-              label='Players'
-              type='text'
+              margin="dense"
+              label="Status"
+              type="number"
               fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
+              value={newTeam.status}
+              onChange={(e) =>
+                setNewTeam({ ...newTeam, status: parseInt(e.target.value) })
+              }
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Save</Button>
+            <Button onClick={handleSave}>Save</Button>
           </DialogActions>
         </div>
       </Dialog>
     </GridToolbarContainer>
-  )
+  );
 }
