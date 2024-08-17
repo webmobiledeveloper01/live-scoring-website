@@ -1,22 +1,21 @@
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import Box from '@mui/material/Box'
-import List from '@mui/material/List'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
+import SportsSoccerOutlinedIcon from '@mui/icons-material/SportsSoccerOutlined'
 import Divider from '@mui/material/Divider'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import SportsSoccerOutlinedIcon from '@mui/icons-material/SportsSoccerOutlined'
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
-import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined'
-import { selectSidebarItem } from '../../../redux/actions/sidebar'
-import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../../../redux/actions/auth'
 import axios from 'axios'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logout } from '../../../redux/actions/auth'
+import { selectSidebarItem } from '../../../redux/actions/sidebar'
 
 export default function UserDrawer() {
   const dispatch = useDispatch()
@@ -33,8 +32,8 @@ export default function UserDrawer() {
   useEffect(() => {
     const fetchTeamsAndTournaments = async () => {
       try {
-        const teamsResponse = await axios.get('http://localhost:8080/api/teams')
-        const tournamentsResponse = await axios.get('http://localhost:8080/api/tournaments')
+        const teamsResponse = await axios.get('https://live-score-website-mnxj.onrender.com/api/teams')
+        const tournamentsResponse = await axios.get('https://live-score-website-mnxj.onrender.com/api/tournaments')
 
         const teams = teamsResponse.data.map(team => ({
           type: 'team',

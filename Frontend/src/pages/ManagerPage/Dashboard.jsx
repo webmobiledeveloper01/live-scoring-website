@@ -1,26 +1,24 @@
-import React from 'react'
-import clsx from 'clsx'
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import React from 'react'
+import CustomBarChart from '../../components/CustomBarChart'
 import CustomGauge from '../../components/CustomGauge'
 import CustomMultiGauge from '../../components/CustomMultiGauge'
-import CustomBarChart from '../../components/CustomBarChart'
-import Typography from '@mui/material/Typography'
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
-import Divider from '@mui/material/Divider'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
 
 import './manage.css'
 
+import { useSelector } from 'react-redux'
 import CustomEditTable from '../../components/CustomTable'
+import { Main } from '../../styled'
 import {
-  contentMenu,
   columns,
   EditToolbar,
   initialRows
 } from './datas/dashboardData'
-import { useSelector } from 'react-redux'
-import { Main } from '../../styled'
 
 const Dashboard = () => {
   const matchItems = [1, 2, 3, 4]

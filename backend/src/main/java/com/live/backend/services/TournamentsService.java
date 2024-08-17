@@ -53,7 +53,7 @@ public class TournamentsService {
             if (tournamentDTO.getSponsor_id() != null) {
                 Optional<TournamentSponsers> sponsor = tournamentSponsersRepository.findById(tournamentDTO.getSponsor_id());
                 if (sponsor.isPresent()) {
-                    existingTournament.setSponsor(sponsor.get()); // Set the actual TournamentSponsers entity
+                    existingTournament.setSponsor(sponsor.get());
                 } else {
                     throw new RuntimeException("Sponsor not found with ID: " + tournamentDTO.getSponsor_id());
                 }
@@ -85,7 +85,7 @@ public class TournamentsService {
         tournamentDTO.setLogo(tournament.getLogo());
         tournamentDTO.setStart_date(tournament.getStart_date());
         tournamentDTO.setEnd_date(tournament.getEnd_date());
-        tournamentDTO.setSponsor_id(tournament.getSponsor() != null ? tournament.getSponsor().getId() : null); // Map sponsor_id from TournamentSponsers
+        tournamentDTO.setSponsor_id(tournament.getSponsor() != null ? tournament.getSponsor().getId() : null);
         tournamentDTO.setStatus(tournament.getStatus());
         return tournamentDTO;
     }
@@ -98,11 +98,10 @@ public class TournamentsService {
         tournament.setStart_date(tournamentDTO.getStart_date());
         tournament.setEnd_date(tournamentDTO.getEnd_date());
 
-        // Fetch and set the sponsor if it exists
         if (tournamentDTO.getSponsor_id() != null) {
             Optional<TournamentSponsers> sponsor = tournamentSponsersRepository.findById(tournamentDTO.getSponsor_id());
             if (sponsor.isPresent()) {
-                tournament.setSponsor(sponsor.get()); // Set the actual TournamentSponsers entity
+                tournament.setSponsor(sponsor.get());
             }
         }
 

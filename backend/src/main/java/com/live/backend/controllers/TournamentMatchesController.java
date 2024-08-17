@@ -6,15 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.live.backend.models.TournamentMatches;
 import com.live.backend.services.TournamentMatchesService;
@@ -48,8 +40,8 @@ public class TournamentMatchesController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TournamentMatches> updateTournamentMatch(@PathVariable Long id, @RequestBody TournamentMatches tournamentMatch) {
-        Optional<TournamentMatches> existingMatch = tournamentMatchesService.findById(id);
-        if (existingMatch.isPresent()) {
+        if (tournamentMatchesService.findById(id).isPresent()) {
+            tournamentMatch.setId(id);  // Ensure the correct ID is set for update
             TournamentMatches updatedMatch = tournamentMatchesService.save(tournamentMatch);
             return new ResponseEntity<>(updatedMatch, HttpStatus.OK);
         } else {
@@ -59,7 +51,11 @@ public class TournamentMatchesController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTournamentMatch(@PathVariable Long id) {
-        tournamentMatchesService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (tournamentMatchesService.findById(id).isPresent()) {
+            tournamentMatchesService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
