@@ -21,7 +21,7 @@ function Matches() {
     const fetchFixtures = async () => {
       try {
         const response = await axios.get(
-          "https://live-score-website-mnxj.onrender.com/api/tournament-matches"
+          "https://live-scoring-website-vjrd.onrender.com/api/tournament-matches"
         ); // Replace with your API endpoint
         console.log(response);
         setFixtures(response.data);

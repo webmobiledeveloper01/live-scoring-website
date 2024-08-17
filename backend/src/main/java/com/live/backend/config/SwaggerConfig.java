@@ -1,7 +1,5 @@
 package com.live.backend.config;
 
-
-
 import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 
 import java.util.List;
@@ -21,30 +19,30 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public OpenAPI openAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("LIVE SCORE")
-                        .description("LIVE SCORE APPLICATION")
-                        .version("1.2.0")
-                        .contact(new Contact()
-                                .name("name")
-                                .email("mail")
-                                .url("phone"))
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-                .servers(List.of(new Server().url("http://localhost:8080")))
-                .addSecurityItem(new SecurityRequirement()
-                        .addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes(
-                                "bearerAuth", new SecurityScheme()
-                                        .name("bearerAuth")
-                                        .type(HTTP)
-                                        .scheme("bearer")
-                                        .description("Provide the JWT token.\"")
-                                        .bearerFormat("JWT")));
-    }
+        @Bean
+        public OpenAPI openAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("LIVE SCORE")
+                                                .description("LIVE SCORE APPLICATION")
+                                                .version("1.2.0")
+                                                .contact(new Contact()
+                                                                .name("name")
+                                                                .email("mail")
+                                                                .url("phone"))
+                                                .license(new License()
+                                                                .name("Apache 2.0")
+                                                                .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
+                                .servers(List.of(new Server().url("https://live-scoring-website-vjrd.onrender.com")))
+                                .addSecurityItem(new SecurityRequirement()
+                                                .addList("bearerAuth"))
+                                .components(new Components()
+                                                .addSecuritySchemes(
+                                                                "bearerAuth", new SecurityScheme()
+                                                                                .name("bearerAuth")
+                                                                                .type(HTTP)
+                                                                                .scheme("bearer")
+                                                                                .description("Provide the JWT token.\"")
+                                                                                .bearerFormat("JWT")));
+        }
 }
