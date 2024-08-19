@@ -10,7 +10,7 @@ const TournamentManagement = () => {
   const [sponsors, setSponsors] = useState([]); // State for sponsors
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
-  const menuLists = ["Tournament", "Live", "Players"];
+  const menuLists = ["","Tournament", "Live", "Players"];
 
   useEffect(() => {
     fetchTournaments();
