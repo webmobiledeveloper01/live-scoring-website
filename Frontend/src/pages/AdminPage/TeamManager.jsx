@@ -1,6 +1,6 @@
 import React from 'react';
 import ManagerTable from './datas/TeamManageData';
-import { Main } from '../../styled'; // Adjust the path based on your project structure
+import { Main } from '../../styled'; 
 import { useSelector } from 'react-redux';
 
 const TeamManager = () => {

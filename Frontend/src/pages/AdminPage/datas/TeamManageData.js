@@ -101,7 +101,10 @@ export default function ManagerTable() {
 
   const fetchManagers = async () => {
     try {
-      const response = await axios.get("https://live-scoring-website-vjrd.onrender.com/api/managers");
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/managers"
+      );
+
       setRows(response.data);
     } catch (error) {
       console.error("Error fetching managers:", error);
