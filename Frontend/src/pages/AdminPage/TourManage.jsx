@@ -10,7 +10,7 @@ const TournamentManagement = () => {
   const [sponsors, setSponsors] = useState([]); // State for sponsors
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
-  const menuLists = ["","Tournament", "Live", "Players"];
+  const menuLists = ['', 'Tournament', 'Live', 'Players'];
 
   useEffect(() => {
     fetchTournaments();
@@ -19,13 +19,11 @@ const TournamentManagement = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await fetch(
-        "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
-      );
-      if (!response.ok) throw new Error("Failed to fetch tournaments");
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments');
+      if (!response.ok) throw new Error('Failed to fetch tournaments');
       const data = await response.json();
-      console.log("Tournament data", data);
-      setTournaments(data);
+      // Call fetchSponsors after tournaments are fetched
+      fetchSponsors(data);
     } catch (error) {
       console.error("Error fetching tournaments:", error);
     }

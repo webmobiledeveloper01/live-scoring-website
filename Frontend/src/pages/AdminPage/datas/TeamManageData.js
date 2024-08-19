@@ -1,13 +1,13 @@
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    InputBase,
-    TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  InputBase,
+  TextField,
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
@@ -104,6 +104,7 @@ export default function ManagerTable() {
       const response = await axios.get(
         "https://live-scoring-website-vjrd.onrender.com/api/managers"
       );
+
       setRows(response.data);
     } catch (error) {
       console.error("Error fetching managers:", error);
