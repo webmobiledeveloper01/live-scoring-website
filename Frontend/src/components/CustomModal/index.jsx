@@ -69,7 +69,9 @@ export default function CustomizedDialogs() {
     }
 
     try {
-      const response = await fetch(`https://live-scoring-website-vjrd.onrender.com/api/users/email/${email}`);
+      const response = await fetch(
+        `https://live-scoring-website-vjrd.onrender.com/api/users/email/${email}`
+      );
       if (response.ok) {
         const user = await response.json();
 

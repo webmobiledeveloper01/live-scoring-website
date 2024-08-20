@@ -10,7 +10,7 @@ const TournamentManagement = () => {
   const [sponsors, setSponsors] = useState([]); // State for sponsors
   const [renderPage, setRenderPage] = useState(null);
   const [select, setSelect] = useState(0);
-  const menuLists = ['', 'Tournament', 'Live', 'Players'];
+  const menuLists = ["", "Tournament", "Live", "Players"];
 
   useEffect(() => {
     fetchTournaments();
@@ -19,8 +19,10 @@ const TournamentManagement = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments');
-      if (!response.ok) throw new Error('Failed to fetch tournaments');
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
+      );
+      if (!response.ok) throw new Error("Failed to fetch tournaments");
       const data = await response.json();
       // Call fetchSponsors after tournaments are fetched
       fetchSponsors(data);
@@ -31,23 +33,27 @@ const TournamentManagement = () => {
 
   const fetchSponsors = async (tournamentData) => {
     try {
-      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers');
-      if (!response.ok) throw new Error('Failed to fetch sponsors');
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers"
+      );
+      if (!response.ok) throw new Error("Failed to fetch sponsors");
       const sponsorsData = await response.json();
       setSponsors(sponsorsData);
       // Once both tournaments and sponsors are fetched, map sponsor names to tournaments
       mapSponsorNames(tournamentData, sponsorsData);
     } catch (error) {
-      console.error('Error fetching sponsors:', error);
+      console.error("Error fetching sponsors:", error);
     }
   };
 
   const mapSponsorNames = (tournaments, sponsors) => {
     const enrichedTournaments = tournaments.map((tournament) => {
-      const sponsor = sponsors.find((sponsor) => sponsor.id === tournament.sponsor_id);
+      const sponsor = sponsors.find(
+        (sponsor) => sponsor.id === tournament.sponsor_id
+      );
       return {
         ...tournament,
-        sponsor_name: sponsor ? sponsor.name : 'Unknown Sponsor', // Add sponsor name field
+        sponsor_name: sponsor ? sponsor.name : "Unknown Sponsor", // Add sponsor name field
       };
     });
     setTournaments(enrichedTournaments); // Update tournaments with sponsor names
@@ -57,9 +63,12 @@ const TournamentManagement = () => {
     const sponsor = sponsors.find((s) => s.id === newTournament.sponsor_id);
     const enrichedTournament = {
       ...newTournament,
-      sponsor_name: sponsor ? sponsor.name : 'Unknown Sponsor',
+      sponsor_name: sponsor ? sponsor.name : "Unknown Sponsor",
     };
-    setTournaments(prevTournaments => [...prevTournaments, enrichedTournament]);
+    setTournaments((prevTournaments) => [
+      ...prevTournaments,
+      enrichedTournament,
+    ]);
   };
 
   const handleDataUpdated = (updatedRows) => {
@@ -72,7 +81,9 @@ const TournamentManagement = () => {
       case 1:
         setRenderPage(
           <CustomEditTable
-            customToolbar={(props) => <EditToolbar {...props} onAddTournament={handleAddTournament} />}
+            customToolbar={(props) => (
+              <EditToolbar {...props} onAddTournament={handleAddTournament} />
+            )}
             columns={columns}
             data={tournaments} // Pass enriched tournaments with sponsor names
             onDataUpdated={handleDataUpdated}

@@ -10,4 +10,5 @@ public class TeamDTO {
     private String description;
     private String contact_details;  
     private int status;
+    private Long manager_id;
 }

@@ -1,5 +1,6 @@
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import Avatar from "@mui/material/Avatar";
 import {
   Button,
   Dialog,
@@ -64,6 +65,7 @@ const columns = [
     align: "left",
     headerAlign: "left",
   },
+
   { field: "name", headerName: "Name", width: 180, editable: true },
   { field: "email", headerName: "Email", width: 250, editable: true },
   {
@@ -72,6 +74,26 @@ const columns = [
     width: 180,
     editable: true,
     type: "password",
+  },
+  {
+    field: "teamInfo",
+    headerName: "Team Info",
+    width: 250,
+    renderCell: (params) => {
+      const { team } = params.row;
+      const teamLogo = team?.logo || ""; // Fallback to empty string if logo is undefined
+      const teamName = team?.name || "No Team";
+
+      return (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={teamLogo}
+            sx={{ marginRight: 8, width: 40, height: 40 }}
+          />
+          <span>{teamName}</span>
+        </div>
+      );
+    },
   },
   {
     field: "status",
@@ -94,22 +116,46 @@ export default function ManagerTable() {
     password: "",
     status: 1,
   });
-
-  useEffect(() => {
-    fetchManagers();
-  }, []);
+  const fetchTeams = async () => {
+    try {
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/teams"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+      return [];
+    }
+  };
 
   const fetchManagers = async () => {
     try {
       const response = await axios.get(
         "https://live-scoring-website-vjrd.onrender.com/api/managers"
       );
-
-      setRows(response.data);
+      return response.data;
     } catch (error) {
       console.error("Error fetching managers:", error);
+      return [];
     }
   };
+
+  const fetchData = async () => {
+    const teams = await fetchTeams();
+    const managers = await fetchManagers();
+
+    // Combine data
+    const combinedData = managers.map((manager) => ({
+      ...manager,
+      team: teams.find((team) => team.manager_id === manager.id), // Assuming manager_id links to team
+    }));
+
+    setRows(combinedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const requestSearch = (e) => {
     const searchedVal = e.target.value.toLowerCase();

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CustomEditTable from "../../components/CustomEditTable";
 import { Main } from "../../styled";
-import {
-    columns,
-    EditToolbar
-} from "../AdminPage/datas/CreateTeamdata";
+import { columns, EditToolbar } from "../AdminPage/datas/CreateTeamdata";
 
 const Createteam = () => {
   const open = useSelector((state) => state.drawer.open);
