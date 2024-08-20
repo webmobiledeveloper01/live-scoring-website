@@ -14,7 +14,7 @@ const TournamentManagement = () => {
 
   useEffect(() => {
     fetchTournaments();
-    fetchSponsors(); // Fetch sponsors when the component mounts
+    fetchSponsors();
   }, []);
 
   const fetchTournaments = async () => {

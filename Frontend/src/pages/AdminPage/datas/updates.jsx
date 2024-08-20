@@ -1,133 +1,82 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import Avatar from '@mui/material/Avatar'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
-import SearchIcon from '@mui/icons-material/Search'
-import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled'
-import { requestPlayer } from '../../../redux/actions'
-import { randomTraderName, randomId } from '@mui/x-data-grid-generator'
-import { GridToolbarContainer } from '@mui/x-data-grid'
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
-} from '@mui/material'
+  TextField,
+} from '@mui/material';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { requestPlayer } from '../../../redux/actions';
+import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled';
 
-export const initialRowss = [
-  {
-    id: 1,
-    name: 'FOOTBALL TEAM MANAGEMENT WEB APPLICATION /images/avatar/player.jpg',
+// Toolbar component with search and add update functionality
+export function EditToolbarr({ setRows }) {
+  const [searched, setSearched] = useState('');
+  const [open, setOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState({
+    title: '',
+    description: '',
+    status: 1,
+  });
+  const dispatch = useDispatch();
 
-    avatar: '/images/avatar/player.jpg',
-    description: 'Defender',
-    TournamentName: 'tournamentA',
-    type: 'Good Performance',
-    date: '01/01/2024',
+  const handleRequestPlayer = () => {
+    dispatch(requestPlayer());
+  };
 
-    jersey: 22
-  },
-  {
-    id: 2,
-    name: 'FOOTBALL TEAM MANAGEMENT WEB APPLICATION /images/avatar/player.jpg',
+  const requestSearch = (e) => {
+    const searchedVal = e.target.value.toLowerCase();
+    setSearched(searchedVal);
+    setRows((prevRows) =>
+      prevRows.filter((row) => row.title.toLowerCase().includes(searchedVal))
+    );
+  };
 
-    avatar: '/images/avatar/player.jpg',
-    description: 'Midfielder',
-    TournamentName: randomTraderName(),
-    type: 'Injury',
-    date: '01/01/2024',
-
-    jersey: 22
-  },
-  {
-    id: 3,
-    name: 'FOOTBALL TEAM MANAGEMENT WEB APPLICATION /images/avatar/player.jpg',
-    avatar: '/images/avatar/player.jpg',
-    description: 'Midfielder',
-    TournamentName: randomTraderName(),
-    type: 'Injury',
-    date: '01/01/2024',
-
-    jersey: 22
-  }
-]
-
-export const columnss = [
-  {
-    field: 'id',
-    headerName: 'No.',
-    width: 50,
-    align: 'left',
-    headerAlign: 'left',
-    type: 'singleSelect'
-  },
-  {
-    field: 'name',
-    headerName: 'Title',
-    width: 580,
-    editable: true
-  },
-  {
-    field: 'description',
-    headerName: 'Description',
-    width: 100,
-    editable: true
-  },
-  {
-    field: 'type',
-    headerName: 'Type',
-    width: 100,
-    editable: true
-  },
-  {
-    field: 'date',
-    headerName: 'Date',
-    width: 100,
-    editable: true
-  }
-]
-
-export const contentMenu = [
-  { text: 'Team updates' }
-  //   { text: 'Admin updates' }
-  //   { text: 'Tournament B' }
-]
-
-export function EditToolbarr (props) {
-  const { setRows, setRowModesModel } = props
-  const [searched, setSearched] = React.useState('')
-  const dispatch = useDispatch()
-  const handleRequstPlayer = () => {
-    dispatch(requestPlayer())
-  }
-
-  const requestSearch = e => {
-    const searchedVal = e.target.value
-    const filteredRows = initialRowss.filter(row => {
-      setSearched(searchedVal)
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase())
-    })
-    setRows(oldRows => [...filteredRows])
-  }
-  const [open, setOpen] = useState(false)
-
-  const handleSave = () => {
-    setRows(prevRows =>
-      prevRows.map(row => (row.id === currentRow.id ? currentRow : row))
-    )
-    handleClose()
-  }
-  const handleOpen = row => {
-    // setCurrentRow(row)
-    setOpen(true)
-  }
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-    // setCurrentRow({ id: '', name: '', pos: '', avatar: '' })
-  }
+    setOpen(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      const now = new Date().toISOString();
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/official-updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...currentRow,
+          createdAt: now,
+          updatedAt: now,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to add update');
+
+      const newUpdate = await response.json();
+      setRows((prevRows) => [
+        ...prevRows,
+        {
+          id: newUpdate.id,
+          title: newUpdate.title,
+          description: newUpdate.description,
+          status: newUpdate.status,
+          createdAt: new Date(newUpdate.createdAt).toLocaleString(),
+          updatedAt: new Date(newUpdate.updatedAt).toLocaleString(),
+        },
+      ]);
+      handleClose();
+    } catch (error) {
+      console.error('Error adding update:', error);
+    }
+  };
 
   return (
     <GridToolbarContainer
@@ -138,79 +87,115 @@ export function EditToolbarr (props) {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder='Search…'
+          placeholder="Search…"
           inputProps={{ 'aria-label': 'search' }}
           value={searched}
           onChange={requestSearch}
         />
       </Search>
-      <button className='pull-btn' color='primary' onClick={handleOpen}>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
         <PersonAddAltOutlinedIcon />
         &nbsp;&nbsp;Add Update
-      </button>
+      </Button>
 
       <Dialog open={open} onClose={handleClose}>
-        <div className='bg-[#061727]'>
-          <DialogTitle>Add Updates</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin='dense'
-              label='Title'
-              type='text'
-              fullWidth
-              // value={initialRows.name}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, name: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='description'
-              type='text'
-              fullWidth
-              // value={initialRows.pos}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, pos: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='type'
-              type='text'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              //             label='date'
-              type='date'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='Publish by'
-              type='text'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Save</Button>
-          </DialogActions>
-        </div>
+        <DialogTitle>Add Update</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Title"
+            type="text"
+            fullWidth
+            value={currentRow.title}
+            onChange={(e) => setCurrentRow({ ...currentRow, title: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            type="text"
+            fullWidth
+            value={currentRow.description}
+            onChange={(e) => setCurrentRow({ ...currentRow, description: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            label="Status"
+            type="number"
+            fullWidth
+            value={currentRow.status}
+            onChange={(e) => setCurrentRow({ ...currentRow, status: Number(e.target.value) })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
       </Dialog>
     </GridToolbarContainer>
-  )
+  );
+}
+
+export default function OfficialUpdates() {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    fetchOfficialUpdates();
+  }, []);
+
+  const fetchOfficialUpdates = async () => {
+    try {
+      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/official-updates');
+      if (!response.ok) throw new Error('Failed to fetch official updates');
+      const data = await response.json();
+      console.log("Fetched data:", data);
+      setRows(data.map(update => ({
+        id: update.id,
+        title: update.title,
+        description: update.description,
+        status: update.status,
+        createdAt: new Date(update.createdAt).toLocaleString(),
+        updatedAt: new Date(update.updatedAt).toLocaleString(),
+      })));
+    } catch (error) {
+      console.error('Error fetching official updates:', error);
+    }
+  };
+
+  return (
+    <div className="official-updates-container">
+      <EditToolbarr setRows={setRows} />
+      <div style={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columnss}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 15]}
+          checkboxSelection
+          disableSelectionOnClick
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            borderColor: 'primary.light',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#1c1c1e',
+              color: '#ffffff',
+            },
+            '& .MuiDataGrid-footerContainer': {
+              backgroundColor: '#1c1c1e',
+              color: '#ffffff',
+            },
+            '& .MuiDataGrid-row': {
+              '&:nth-of-type(odd)': {
+                backgroundColor: '#f5f5f5',
+              },
+            },
+          }}
+        />
+      </div>
+    </div>
+  );
 }
