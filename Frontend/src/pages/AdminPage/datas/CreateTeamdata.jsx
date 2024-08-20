@@ -7,12 +7,15 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { GridToolbarContainer } from "@mui/x-data-grid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Search, SearchIconWrapper, StyledInputBase } from "../../../styled";
 
 export const columns = [
@@ -77,8 +80,8 @@ export const columns = [
 export function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
   const [teams, setTeams] = useState([]);
+  const [managers, setManagers] = useState([]);
   const [searched, setSearched] = useState("");
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [newTeam, setNewTeam] = useState({
     name: "",
@@ -86,10 +89,12 @@ export function EditToolbar(props) {
     contact: "",
     description: "",
     status: 1,
+    manager_id: "",
   });
 
   useEffect(() => {
     fetchTeams();
+    fetchManagers();
   }, []);
 
   const fetchTeams = async () => {
@@ -105,6 +110,17 @@ export function EditToolbar(props) {
       setRows(formattedData);
     } catch (error) {
       console.error("Error fetching teams:", error);
+    }
+  };
+
+  const fetchManagers = async () => {
+    try {
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/managers"
+      );
+      setManagers(response.data);
+    } catch (error) {
+      console.error("Error fetching managers:", error);
     }
   };
 
@@ -137,7 +153,6 @@ export function EditToolbar(props) {
   };
 
   const handleOpen = () => setOpen(true);
-
   const handleClose = () => setOpen(false);
 
   return (
@@ -161,62 +176,76 @@ export function EditToolbar(props) {
       </Button>
 
       <Dialog open={open} onClose={handleClose}>
-        <div className="bg-[#061727]">
-          <DialogTitle>Add New Team</DialogTitle>
-          <DialogContent className="bg-[#061727]">
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Name"
-              type="text"
-              fullWidth
-              value={newTeam.name}
-              onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
-            />
-            <TextField
-              margin="dense"
-              label="Logo"
-              type="text"
-              fullWidth
-              value={newTeam.logo}
-              onChange={(e) => setNewTeam({ ...newTeam, logo: e.target.value })}
-            />
-            <TextField
-              margin="dense"
-              label="Contact"
-              type="text"
-              fullWidth
-              value={newTeam.contact}
+        <DialogTitle>Add New Team</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Name"
+            type="text"
+            fullWidth
+            value={newTeam.name}
+            onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            label="Logo"
+            type="text"
+            fullWidth
+            value={newTeam.logo}
+            onChange={(e) => setNewTeam({ ...newTeam, logo: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            label="Contact"
+            type="text"
+            fullWidth
+            value={newTeam.contact}
+            onChange={(e) =>
+              setNewTeam({ ...newTeam, contact: e.target.value })
+            }
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            type="text"
+            fullWidth
+            value={newTeam.description}
+            onChange={(e) =>
+              setNewTeam({ ...newTeam, description: e.target.value })
+            }
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Manager</InputLabel>
+            <Select
+              value={newTeam.manager_id}
               onChange={(e) =>
-                setNewTeam({ ...newTeam, contact: e.target.value })
+                setNewTeam({ ...newTeam, manager_id: e.target.value })
               }
-            />
-            <TextField
-              margin="dense"
-              label="Description"
-              type="text"
-              fullWidth
-              value={newTeam.description}
-              onChange={(e) =>
-                setNewTeam({ ...newTeam, description: e.target.value })
-              }
-            />
-            <TextField
-              margin="dense"
-              label="Status"
-              type="number"
-              fullWidth
-              value={newTeam.status}
-              onChange={(e) =>
-                setNewTeam({ ...newTeam, status: parseInt(e.target.value) })
-              }
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSave}>Save</Button>
-          </DialogActions>
-        </div>
+            >
+              <MenuItem value="">None</MenuItem>
+              {managers.map((manager) => (
+                <MenuItem key={manager.id} value={manager.id}>
+                  {manager.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            margin="dense"
+            label="Status"
+            type="number"
+            fullWidth
+            value={newTeam.status}
+            onChange={(e) =>
+              setNewTeam({ ...newTeam, status: parseInt(e.target.value) })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
       </Dialog>
     </GridToolbarContainer>
   );

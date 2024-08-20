@@ -77,8 +77,8 @@ export const columns = [
     ),
   },
   {
-    field: 'sponsor_name',
-    headerName: 'Sponsor Name',
+    field: "sponsor_name",
+    headerName: "Sponsor Name",
     width: 150,
     editable: false,
   },
@@ -100,12 +100,14 @@ export function EditToolbar(props) {
   });
   const fetchSponsors = async () => {
     try {
-      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers');
-      if (!response.ok) throw new Error('Failed to fetch sponsors');
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers"
+      );
+      if (!response.ok) throw new Error("Failed to fetch sponsors");
       const data = await response.json();
       setSponsors(data);
     } catch (error) {
-      console.error('Error fetching sponsors:', error);
+      console.error("Error fetching sponsors:", error);
     }
   };
   React.useEffect(() => {
@@ -139,8 +141,8 @@ export function EditToolbar(props) {
 
   const handleInputChange = (event) => {
     const { name, value, type } = event.target;
-  
-    if (type === 'radio') {
+
+    if (type === "radio") {
       const sponsorId = parseInt(value); // Convert to number
       setNewTournament((prev) => ({
         ...prev,
@@ -153,9 +155,6 @@ export function EditToolbar(props) {
       }));
     }
   };
-  
-  
-  
 
   const handleSave = async () => {
     try {
@@ -166,20 +165,23 @@ export function EditToolbar(props) {
         start_date: new Date(newTournament.startDate).toISOString(),
         end_date: new Date(newTournament.endDate).toISOString(),
         status: parseInt(newTournament.status),
-        sponsor_id: newTournament.sponsorId // Single sponsor ID
+        sponsor_id: newTournament.sponsorId, // Single sponsor ID
       };
-  
-      console.log('Payload to be sent:', payload);
-  
-      const response = await fetch('https://live-scoring-website-vjrd.onrender.com/api/tournaments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-  
-      if (!response.ok) throw new Error('Failed to add tournament');
+
+      console.log("Payload to be sent:", payload);
+
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournaments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to add tournament");
       const addedTournament = await response.json();
       onAddTournament(addedTournament);
       handleClose();
@@ -187,7 +189,6 @@ export function EditToolbar(props) {
       console.error("Error adding tournament:", error.message);
     }
   };
-  
 
   return (
     <GridToolbarContainer
@@ -270,24 +271,21 @@ export function EditToolbar(props) {
             onChange={handleInputChange}
           />
           <div>
-    <p>Sponsor:</p>
-    { 
-  sponsors.map((sponsor) => (
-    <div key={sponsor.id}>
-      <input
-        type="radio"
-        id={`sponsor-${sponsor.id}`}
-        name="sponsorId"
-        value={sponsor.id}
-        checked={newTournament.sponsorId === sponsor.id} // Ensure type match here
-        onChange={handleInputChange}
-      />
-      <label htmlFor={`sponsor-${sponsor.id}`}>{sponsor.name}</label>
-    </div>
-  ))
-}
-
-  </div>
+            <p>Sponsor:</p>
+            {sponsors.map((sponsor) => (
+              <div key={sponsor.id}>
+                <input
+                  type="radio"
+                  id={`sponsor-${sponsor.id}`}
+                  name="sponsorId"
+                  value={sponsor.id}
+                  checked={newTournament.sponsorId === sponsor.id} // Ensure type match here
+                  onChange={handleInputChange}
+                />
+                <label htmlFor={`sponsor-${sponsor.id}`}>{sponsor.name}</label>
+              </div>
+            ))}
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

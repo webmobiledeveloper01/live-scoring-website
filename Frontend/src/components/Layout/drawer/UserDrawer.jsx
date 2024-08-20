@@ -32,14 +32,12 @@ export default function UserDrawer() {
   useEffect(() => {
     const fetchTeamsAndTournaments = async () => {
       try {
-
         const teamsResponse = await axios.get(
           "https://live-scoring-website-vjrd.onrender.com/api/teams"
         );
         const tournamentsResponse = await axios.get(
           "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
         );
-
 
         const teams = teamsResponse.data.map((team) => ({
           type: "team",

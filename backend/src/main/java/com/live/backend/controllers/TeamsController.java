@@ -2,7 +2,13 @@ package com.live.backend.controllers;
 
 import com.live.backend.dto.TeamDTO;
 import com.live.backend.models.Teams;
+import com.live.backend.models.Users;
+import com.live.backend.repos.UsersRepository;
 import com.live.backend.services.TeamsService;
+import com.live.backend.services.UsersService;
+
+import com.live.backend.services.UsersService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +23,10 @@ public class TeamsController {
 
     @Autowired
     private TeamsService teamsService;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
 
     @GetMapping
     public ResponseEntity<List<TeamDTO>> getAllTeams() {
@@ -61,6 +71,7 @@ public class TeamsController {
         dto.setDescription(team.getDescription());
         dto.setContact_details(team.getContact_details());  // Ensure consistency
         dto.setStatus(team.getStatus());
+        dto.setManager_id(team.getManager().getId());
         return dto;
     }
 
@@ -72,6 +83,9 @@ public class TeamsController {
         team.setDescription(dto.getDescription());
         team.setContact_details(dto.getContact_details());  // Ensure consistency
         team.setStatus(dto.getStatus());
+        Users manager = usersRepository.findById(dto.getManager_id()).orElse(null);
+        team.setManager(manager);
+        
         return team;
     }
 }

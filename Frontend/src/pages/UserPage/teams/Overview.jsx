@@ -1,12 +1,12 @@
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import {
-    Box,
-    Grid,
-    Paper,
-    Stack,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
