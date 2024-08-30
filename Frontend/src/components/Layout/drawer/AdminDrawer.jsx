@@ -67,6 +67,8 @@ export default function AdminDrawer () {
   ]
   const handleAction = item => {
     if (item.text == 'logout') {
+      localStorage.removeItem('user');
+      localStorage.removeItem('menuIndex');
       dispatch(logout())
       navigate('/')
     } else {

@@ -1,285 +1,277 @@
-import React, { useState } from 'react'
-// import { Avatar } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import clsx from 'clsx'
-import { Search, SearchIconWrapper, StyledInputBase } from '../../../styled'
-
-import { GridToolbarContainer } from '@mui/x-data-grid'
-import { randomId, randomArrayItem } from '@mui/x-data-grid-generator'
-import { useDispatch } from 'react-redux'
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import Avatar from "@mui/material/Avatar";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
-} from '@mui/material'
-import Avatar from '@mui/material/Avatar'
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'
-// import SearchIcon from '@mui/icons-material/Search'
-// import { SearchIconWrapper, StyledInputBase } from '../../../styled'
-import { requestPlayer } from '../../../redux/actions'
-// import { randomTraderName, randomId } from '@mui/x-data-grid-generator'
-// import { GridToolbarContainer } from '@mui/x-data-grid'
+  InputBase,
+  TextField,
+} from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
+import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-const roles = ['Active', 'Request Approval']
-const randomRole = () => {
-  return randomArrayItem(roles)
-}
+// Styled components
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
 
-export const initialRows = [
-  {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
   },
+}));
+
+const columns = [
   {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
-  },
-  {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
-  },
-  {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
-  },
-  {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
-  },
-  {
-    id: randomId(),
-    team: 'Arsenal',
-    avatar: 'https://lsm-static-prod.livescore.com/medium/enet/9825.png',
-    manager: 'jacob jones',
-    status: randomRole(),
-    ofplayer: 19,
-    userName: 'manager@124',
-    pass: '1234jfjdsa'
-  }
-]
-export const columns = [
-  {
-    field: 'team',
-    headerName: 'TEAM',
-    width: 220,
-    editable: false,
-    renderCell: params => {
-      return (
-        <div className='d-flex'>
-          <Avatar
-            src={params.row.avatar}
-            sx={{ margin: '10px 3px', width: '30px', height: '30px' }}
-          />
-          <span>{params.row.team}</span>
-        </div>
-      )
-    }
-  },
-  {
-    field: 'manager',
-    headerName: 'Manager',
-    type: 'text',
-    width: 180,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true
-  },
-  {
-    field: 'userName',
-    headerName: 'UserName',
-    type: 'text',
-    width: 180,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true
-  },
-  {
-    field: 'pass',
-    headerName: 'Password',
-    type: 'Number',
-    width: 180,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    width: 150,
-    editable: true,
-    type: 'singleSelect',
-    valueOptions: ['Active', 'Request Approval'],
-    renderCell: params => {
-      return (
-        <span
-          className={clsx(
-            params.row.status == 'Active' ? 'text-success' : 'text-warning'
-          )}
-        >
-          {params.row.status}
-        </span>
-      )
-    }
-  },
-  {
-    field: 'ofplayer',
-    headerName: '#OF PLAYER',
-    type: 'text',
+    field: "id",
+    headerName: "No.",
     width: 50,
-    editable: true
-  }
-]
+    align: "left",
+    headerAlign: "left",
+  },
 
-export function EditToolbar (props) {
-  const { setRows, setRowModesModel } = props
-  const [searched, setSearched] = React.useState('')
-  const dispatch = useDispatch()
-  const handleRequstPlayer = () => {
-    dispatch(requestPlayer())
-  }
+  { field: "name", headerName: "Name", width: 180, editable: true },
+  { field: "email", headerName: "Email", width: 250, editable: true },
+  {
+    field: "password",
+    headerName: "Password",
+    width: 180,
+    editable: true,
+    type: "password",
+  },
+  {
+    field: "teamInfo",
+    headerName: "Team Info",
+    width: 250,
+    renderCell: (params) => {
+      const { team } = params.row;
+      const teamLogo = team?.logo || ""; // Fallback to empty string if logo is undefined
+      const teamName = team?.name || "No Team";
 
-  const requestSearch = e => {
-    const searchedVal = e.target.value
-    const filteredRows = initialRows.filter(row => {
-      setSearched(searchedVal)
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase())
-    })
-    setRows(oldRows => [...filteredRows])
-  }
-  const [open, setOpen] = useState(false)
+      return (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={teamLogo}
+            sx={{ marginRight: 8, width: 40, height: 40 }}
+          />
+          <span>{teamName}</span>
+        </div>
+      );
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 100,
+    editable: true,
+    renderCell: (params) => (
+      <span>{params.row.status ? "Active" : "Inactive"}</span>
+    ),
+  },
+];
 
-  const handleSave = () => {
-    setRows(prevRows =>
-      prevRows.map(row => (row.id === currentRow.id ? currentRow : row))
-    )
-    handleClose()
-  }
-  const handleOpen = row => {
-    // setCurrentRow(row)
-    setOpen(true)
-  }
+export default function ManagerTable() {
+  const [rows, setRows] = useState([]);
+  const [searched, setSearched] = useState("");
+  const [open, setOpen] = useState(false);
+  const [newManager, setNewManager] = useState({
+    name: "",
+    email: "",
+    password: "",
+    status: 1,
+  });
+  const fetchTeams = async () => {
+    try {
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/teams"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+      return [];
+    }
+  };
 
-  const handleClose = () => {
-    setOpen(false)
-    // setCurrentRow({ id: '', name: '', pos: '', avatar: '' })
-  }
+  const fetchManagers = async () => {
+    try {
+      const response = await axios.get(
+        "https://live-scoring-website-vjrd.onrender.com/api/managers"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching managers:", error);
+      return [];
+    }
+  };
+
+  const fetchData = async () => {
+    const teams = await fetchTeams();
+    const managers = await fetchManagers();
+
+    // Combine data
+    const combinedData = managers.map((manager) => ({
+      ...manager,
+      team: teams.find((team) => team.manager_id === manager.id), // Assuming manager_id links to team
+    }));
+
+    setRows(combinedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const requestSearch = (e) => {
+    const searchedVal = e.target.value.toLowerCase();
+    setSearched(searchedVal);
+    const filteredRows = rows.filter((row) =>
+      row.name.toLowerCase().includes(searchedVal)
+    );
+    setRows(filteredRows);
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await axios.post(
+        "https://live-scoring-website-vjrd.onrender.com/api/managers",
+        newManager
+      );
+      setRows((prevRows) => [...prevRows, response.data]);
+      handleClose();
+    } catch (error) {
+      console.error("Error saving manager:", error);
+    }
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
-    <GridToolbarContainer
-      sx={{ display: 'flex', justifyContent: 'space-between', margin: '8px 0' }}
-    >
-      <Search sx={{ borderRadius: 25 }}>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder='Search…'
-          inputProps={{ 'aria-label': 'search' }}
-          value={searched}
-          onChange={requestSearch}
-        />
-      </Search>
-      <button className='pull-btn' color='primary' onClick={handleOpen}>
-        <PersonAddAltOutlinedIcon />
-        &nbsp;&nbsp;add new manager
-      </button>
+    <div style={{ height: 600, width: "100%" }}>
+      <div style={{ marginBottom: 16 }}>
+        <Button color="primary" onClick={handleOpen}>
+          <PersonAddAltOutlinedIcon />
+          &nbsp;&nbsp;Add New Manager
+        </Button>
+      </div>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "8px 0",
+              }}
+            >
+              <Search sx={{ borderRadius: 25 }}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  value={searched}
+                  onChange={requestSearch}
+                />
+              </Search>
+            </GridToolbarContainer>
+          ),
+        }}
+        componentsProps={{
+          toolbar: { setRows, rows },
+        }}
+      />
 
       <Dialog open={open} onClose={handleClose}>
-        <div className='bg-[#061727]'>
-          <DialogTitle>add new manager</DialogTitle>
-          <DialogContent className='bg-[#061727]'>
-            <TextField
-              autoFocus
-              margin='dense'
-              label='Name'
-              type='text'
-              fullWidth
-              // value={initialRows.name}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, name: e.target.value })
-              // }
-            />
-            <TextField
-              autoFocus
-              margin='dense'
-              label='Email'
-              type='email'
-              fullWidth
-              // value={initialRows.name}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, name: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='Password'
-              type='text'
-              fullWidth
-              // value={initialRows.pos}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, pos: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='Contact No.'
-              type='number'
-              fullWidth
-              // value={initialRows.pos}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, pos: e.target.value })
-              // }
-            />
-            <TextField
-              margin='dense'
-              label='team'
-              type='text'
-              fullWidth
-              // value={initialRows.avatar}
-              // onChange={e =>
-              //   setinitialRows({ ...initialRows, avatar: e.target.value })
-              // }
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Save</Button>
-          </DialogActions>
-        </div>
+        <DialogTitle>Add New Manager</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Name"
+            type="text"
+            fullWidth
+            value={newManager.name}
+            onChange={(e) =>
+              setNewManager({ ...newManager, name: e.target.value })
+            }
+          />
+          <TextField
+            margin="dense"
+            label="Email"
+            type="email"
+            fullWidth
+            value={newManager.email}
+            onChange={(e) =>
+              setNewManager({ ...newManager, email: e.target.value })
+            }
+          />
+          <TextField
+            margin="dense"
+            label="Password"
+            type="password"
+            fullWidth
+            value={newManager.password}
+            onChange={(e) =>
+              setNewManager({ ...newManager, password: e.target.value })
+            }
+          />
+          <TextField
+            margin="dense"
+            label="Status"
+            type="number"
+            fullWidth
+            value={newManager.status}
+            onChange={(e) =>
+              setNewManager({ ...newManager, status: parseInt(e.target.value) })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
       </Dialog>
-    </GridToolbarContainer>
-  )
+    </div>
+  );
 }

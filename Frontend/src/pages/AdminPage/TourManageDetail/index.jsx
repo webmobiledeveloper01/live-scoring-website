@@ -1,11 +1,10 @@
-import React from 'react'
 import clsx from 'clsx'
+import React from 'react'
 import { useParams } from 'react-router-dom'
-import TeamPage from './TeamPage'
+import Knockout from './Knockout'
 import MatchPage from './MatchPage'
 import OfficalPage from './OfficalPage'
-import { setBreadCrumbs } from '../../../redux/actions'
-import Knockout from './Knockout'
+import TeamPage from './TeamPage'
 function TourManageDetail () {
   const menuLists = ['TEAMS', 'KNOCKOUT', 'MATCHES', 'OFFICAL TEAM']
   const [RenderPage, setRenderPage] = React.useState(<TeamPage></TeamPage>)
@@ -53,16 +52,6 @@ function TourManageDetail () {
   return (
     <>
       <div className='max-w-7xl mx-auto mt-4 pl20 max-md:p-4  max-sm:px-5'>
-        <div className='main-head-intro flex flex-wrap justify-between items-center'>
-          <div className='main-head--logo flex items-center justify-start'>
-            <img src='https://static.livescore.com/i2/fh/england.jpg' alt='' />
-            <div className='main-head--info flex flex-col ml-2'>
-              <h2 className='main-head--team'>Premier League</h2>
-              <h5 className='main-head--country text-secondary'>England</h5>
-            </div>
-          </div>
-          <button className='main-head--action outline-btn mt-2 sm:mt-0'>Change Logo</button>
-        </div>
         <ul className='na main-navar flex gap-8  bg-[#061727] min-h-[64px] items-center overflow-x-auto '>
           {menuLists.map((item, index) => (
             <li className='nav-item p-4 flex-shrink-0' key={index}>

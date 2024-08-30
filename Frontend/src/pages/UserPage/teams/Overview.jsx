@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import {
   Box,
-  Paper,
-  Typography,
   Grid,
+  Paper,
   Stack,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function Overview() {
   const theme = useTheme();
@@ -20,7 +20,7 @@ function Overview() {
     const fetchFixtures = async () => {
       try {
         const response = await axios.get(
-          "https://live-score-website-mnxj.onrender.com/api/tournament-matches" // Replace with your API endpoint
+          "https://live-scoring-website-vjrd.onrender.com/api/tournament-matches" // Replace with your API endpoint
         );
         console.log(response);
         setFixtures(response.data);

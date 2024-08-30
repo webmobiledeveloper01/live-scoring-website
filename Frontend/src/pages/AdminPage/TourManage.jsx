@@ -1,79 +1,130 @@
-import React, { useState } from 'react'
-import './adminstyle.css'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import IconButton from '@mui/material/IconButton'
-import CustomTab from '../../components/CustomTabs'
-import CustomEditTable from '../../components/CustomEditTable'
-import {
-  contentMenu,
-  columns,
-  EditToolbar,
-  initialRows
-} from '../AdminPage/datas/tournamentDetailData'
-import TourManageDetail from './TourManageDetail'
-import OfficalPage from './TourManageDetail/OfficalPage'
+import React, { useEffect, useState } from "react";
+import CustomEditTable from "../../components/CustomEditTable";
+import { columns, EditToolbar } from "../AdminPage/datas/tournamentDetailData";
+import "./adminstyle.css";
+import TourManageDetail from "./TourManageDetail";
+import OfficalPage from "./TourManageDetail/OfficalPage";
 
 const TournamentManagement = () => {
-  const [RenderPage, setRenderPage] = React.useState(
-    <CustomEditTable
-      customToolbar={EditToolbar}
-      columns={columns}
-      data={initialRows}
-    />
-  )
+  const [tournaments, setTournaments] = useState([]);
+  const [sponsors, setSponsors] = useState([]); // State for sponsors
+  const [renderPage, setRenderPage] = useState(null);
+  const [select, setSelect] = useState(0);
+  const menuLists = ["", "Tournament", "Live", "Players"];
 
-  const [select, setSelect] = React.useState(0)
+  useEffect(() => {
+    fetchTournaments();
+    fetchSponsors();
+  }, []);
 
-  const menuLists = ['Tournament', 'Live', 'Players']
+  const fetchTournaments = async () => {
+    try {
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournaments"
+      );
+      if (!response.ok) throw new Error("Failed to fetch tournaments");
+      const data = await response.json();
+      // Call fetchSponsors after tournaments are fetched
+      fetchSponsors(data);
+    } catch (error) {
+      console.error("Error fetching tournaments:", error);
+    }
+  };
 
-  const handleMenu = (index, text) => {
-    setSelect(index)
-    console.log(index)
+  const fetchSponsors = async (tournamentData) => {
+    try {
+      const response = await fetch(
+        "https://live-scoring-website-vjrd.onrender.com/api/tournament-sponsers"
+      );
+      if (!response.ok) throw new Error("Failed to fetch sponsors");
+      const sponsorsData = await response.json();
+      setSponsors(sponsorsData);
+      // Once both tournaments and sponsors are fetched, map sponsor names to tournaments
+      mapSponsorNames(tournamentData, sponsorsData);
+    } catch (error) {
+      console.error("Error fetching sponsors:", error);
+    }
+  };
+
+  const mapSponsorNames = (tournaments, sponsors) => {
+    const enrichedTournaments = tournaments.map((tournament) => {
+      const sponsor = sponsors.find(
+        (sponsor) => sponsor.id === tournament.sponsor_id
+      );
+      return {
+        ...tournament,
+        sponsor_name: sponsor ? sponsor.name : "Unknown Sponsor", // Add sponsor name field
+      };
+    });
+    setTournaments(enrichedTournaments); // Update tournaments with sponsor names
+  };
+
+  const handleAddTournament = (newTournament) => {
+    const sponsor = sponsors.find((s) => s.id === newTournament.sponsor_id);
+    const enrichedTournament = {
+      ...newTournament,
+      sponsor_name: sponsor ? sponsor.name : "Unknown Sponsor",
+    };
+    setTournaments((prevTournaments) => [
+      ...prevTournaments,
+      enrichedTournament,
+    ]);
+  };
+
+  const handleDataUpdated = (updatedRows) => {
+    setTournaments(updatedRows);
+  };
+
+  const handleMenu = (index) => {
+    setSelect(index);
     switch (index) {
-      case 0:
+      case 1:
         setRenderPage(
           <CustomEditTable
-            customToolbar={EditToolbar}
+            customToolbar={(props) => (
+              <EditToolbar {...props} onAddTournament={handleAddTournament} />
+            )}
             columns={columns}
-            data={initialRows}
+            data={tournaments} // Pass enriched tournaments with sponsor names
+            onDataUpdated={handleDataUpdated}
           />
-        )
-        break
-      case 1:
-        setRenderPage(<TourManageDetail />)
-        break
+        );
+        break;
       case 2:
-        setRenderPage(<OfficalPage />)
-        break
-
+        setRenderPage(<TourManageDetail />);
+        break;
+      case 3:
+        setRenderPage(<OfficalPage />);
+        break;
       default:
-        break
+        setRenderPage(null);
+        break;
     }
-  }
-  return (
-    <>
-      <div className='max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4'>
-        <ul className='nav main-nav  flex gap-8  bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6'>
-          {menuLists.map((item, index) => (
-            <li className='nav-item  cursor-pointer p-4 flex-shrink-0' key={index}>
-              <a
-                className={
-                  ('nav-link cursor-pointer',
-                  index == select && '!active !text-yellow-200')
-                }
-                onClick={() => handleMenu(index, item)}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-        {/* <CustomTab borderShow={true} tabData={contentMenu} /> */}
-        <div className='mai-body'>{RenderPage}</div>
-      </div>
-    </>
-  )
-}
+  };
 
-export default TournamentManagement
+  useEffect(() => {
+    handleMenu(select);
+  }, [select]);
+
+  return (
+    <div className="max-w-6xl mx-auto mt-10 ml28 max-md:mx-4 max-md:mt-4">
+      <ul className="nav main-nav flex gap-8 bg-[#061727] min-h-[64px] items-center overflow-x-auto rounded-lg mb-6">
+        {menuLists.map((item, index) => (
+          <li className="nav-item cursor-pointer p-4 flex-shrink-0" key={index}>
+            <a
+              className={`nav-link cursor-pointer ${
+                index === select ? "!active !text-yellow-200" : ""
+              }`}
+              onClick={() => handleMenu(index)}
+            >
+              {item}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className="mai-body">{renderPage}</div>
+    </div>
+  );
+};
+
+export default TournamentManagement;

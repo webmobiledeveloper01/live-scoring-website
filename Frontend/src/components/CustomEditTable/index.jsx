@@ -1,65 +1,70 @@
-import * as React from 'react'
-import Box from '@mui/material/Box'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import SaveIcon from '@mui/icons-material/Save'
-import CancelIcon from '@mui/icons-material/Close'
-import {
-  DataGrid,
-  GridRowEditStopReasons,
-  GridRowModes,
-  GridActionsCellItem
-} from '@mui/x-data-grid'
+import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import Box from '@mui/material/Box';
+import { DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes } from '@mui/x-data-grid';
+import * as React from 'react';
+import { useEffect } from 'react';
 
-export default function CustomEditTable ({
-  customToolbar,
-  columns,
-  data,
-  actionMode,
-  option,
-  showActions = true // Add a new prop with a default value
-}) {
-  const [rows, setRows] = React.useState(data)
-  const [rowModesModel, setRowModesModel] = React.useState({})
+export default function CustomEditTable({ customToolbar, columns, data, option, showActions = true, onDataUpdated }) {
+  const [rows, setRows] = React.useState(data);
+  const [rowModesModel, setRowModesModel] = React.useState({});
+
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (onDataUpdated) {
+      onDataUpdated(rows);
+    }
+  }, [rows, onDataUpdated]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true
+      event.defaultMuiPrevented = true;
+    } else {
+      // Save row changes if not cancelled
+      processRowUpdate(params.row);
     }
-  }
+  };
+  
+  const processRowUpdate = newRow => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+  
 
   const handleEditClick = id => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
-  }
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
   const handleSaveClick = id => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-  }
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
 
   const handleDeleteClick = id => () => {
-    setRows(rows.filter(row => row.id !== id))
-  }
+    setRows(rows.filter(row => row.id !== id));
+  };
 
   const handleCancelClick = id => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true }
-    })
+    });
 
-    const editedRow = rows.find(row => row.id === id)
+    const editedRow = rows.find(row => row.id === id);
     if (editedRow.isNew) {
-      setRows(rows.filter(row => row.id !== id))
+      setRows(rows.filter(row => row.id !== id));
     }
-  }
+  };
 
-  const processRowUpdate = newRow => {
-    const updatedRow = { ...newRow, isNew: false }
-    setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
-    return updatedRow
-  }
 
   const handleRowModesModelChange = newRowModesModel => {
-    setRowModesModel(newRowModesModel)
-  }
+    setRowModesModel(newRowModesModel);
+  };
 
   const addColumns = {
     field: 'actions',
@@ -68,16 +73,14 @@ export default function CustomEditTable ({
     width: 100,
     cellClassName: 'actions',
     getActions: ({ id }) => {
-      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
+      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
       if (isInEditMode) {
         return [
           <GridActionsCellItem
             icon={<SaveIcon />}
             label='Save'
-            sx={{
-              color: 'primary.main'
-            }}
+            sx={{ color: 'primary.main' }}
             onClick={handleSaveClick(id)}
           />,
           <GridActionsCellItem
@@ -87,7 +90,7 @@ export default function CustomEditTable ({
             onClick={handleCancelClick(id)}
             color='inherit'
           />
-        ]
+        ];
       }
 
       return [
@@ -104,32 +107,23 @@ export default function CustomEditTable ({
           onClick={handleDeleteClick(id)}
           color='inherit'
         />
-      ]
+      ];
     }
-  }
+  };
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: '100%'
-      }}
-    >
+    <Box sx={{ height: 500, width: '100%' }}>
       <DataGrid
         rows={rows}
-        columns={showActions ? [...columns, addColumns] : columns} // Conditionally add action columns
+        columns={showActions ? [...columns, addColumns] : columns}
         editMode='row'
         {...option}
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: customToolbar
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel }
-        }}
+        slots={{ toolbar: customToolbar }}
+        slotProps={{ toolbar: { setRows, setRowModesModel } }}
         sx={{
           borderTop: 'none',
           '--DataGrid-rowBorderColor': 'transparent',
@@ -161,5 +155,5 @@ export default function CustomEditTable ({
         }}
       />
     </Box>
-  )
+  );
 }
